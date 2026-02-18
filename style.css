@@ -1,0 +1,40 @@
+:root
+{
+    --bg:#0C0C0C;
+    --bg2:#1e1e1eca;
+    --border: #1e1e1e;
+}
+
+body
+{
+    background: var(--bg);
+}
+
+.navbar-container
+{
+    z-index: 1;
+    inset: 0 0 auto 0;
+    position: fixed;
+    padding: 1.5rem 3rem; 
+    border-bottom: 1px solid transparent; 
+    display: flex;
+    justify-content: space-around;
+    align-items: center; 
+    background: var(--bg2);
+    backdrop-filter: blur(14px);
+}
+
+.navbar-logo
+{
+    inset: 0 0 auto 0;
+    z-index: 1;
+    position: fixed;
+    padding: 2.5rem 2rem;    
+}
+
+.navbar-links
+{
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+}
