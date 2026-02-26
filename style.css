@@ -1,14 +1,14 @@
 :root
 {
-    --bg:#0C0C0C;
-    --bg2:#1e1e1eca;
-    --border: #1e1e1e;
-    --text:   #e8e8e8;
-    --muted:  #555;
-    --muted2: #2a2a2a;
-    --accent: #e8ff5a;
-    --fd: 'Syne', sans-serif;
-    --fm: 'DM Mono', monospace;
+    --background:#0D0D0D;
+    --background-top:#1e1e1e8b;
+    /* --border: #1e1e1e; */
+    --color-text-body:   #e8e8e8;
+    --color-text-muted:   #565656;
+    --color-text-accent:   #e8ff5a;
+    /* --muted2: #2a2a2a; */
+    --font-family-text-body: 'Syne', sans-serif;
+    --font-family-text-navbar: 'DM Mono', monospace;
 }
 
 html 
@@ -18,11 +18,10 @@ html
 
 body
 {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
+    background: var(--background);
+    color: var(--color-text-body);
+    font-family: var(--font-family-text-body);
     overflow-x: hidden;
-    /* cursor: none; */
 }
 
 .navbar-container
@@ -35,13 +34,21 @@ body
     display: flex;
     justify-content: flex-start;
     align-items: center; 
-    background: var(--bg2);
-    backdrop-filter: blur(14px);
+    background: var(--background-top);
+    backdrop-filter: blur(5px);
 }
 
-.navbar-logo
+.navbar-logo img
 {
-    padding: 2.5rem 2rem;    
+    /* padding: 1rem 1rem; */
+    /* text-decoration: none;     */
+    /* font-family: var(--font-family-text-body); */
+    /* font-size: 1.5rem; */
+    /* letter-spacing: .1em; */
+    /* text-transform: uppercase; */
+    /* color: var(--color-text-accent); */
+    max-width: auto;
+    max-height: 75px;
 }
 
 .navbar-links
@@ -56,16 +63,80 @@ body
 
 .navbar-links a 
 {
-    font-family: 'DM Mono', monospace; 
+    font-family: var(--font-family-text-navbar);
     font-size: .75rem;
     letter-spacing: .1em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--color-text-muted);
     text-decoration: none;
     transition: color .2s;
 }
 
 .navbar-links a:hover 
 { 
-    color: var(--text); 
+    color: var(--color-text-body); 
 } 
+
+section 
+{
+    padding: 7rem 3rem; 
+}
+
+.hero-container
+{
+    position: relative; 
+    min-height: 100vh; 
+    overflow: hidden;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-end;
+    padding: 0 3rem 5.5rem;
+}
+
+.hero-canvas
+{
+    position: absolute; 
+    inset: 0;
+    width: 100%; 
+    height: 100%;
+    pointer-events: auto;
+}
+
+/* .hero-vignette
+{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 35%, #080808 100%);
+} */
+
+.hero-title 
+{
+    position: relative;
+    /* font-size: clamp(3.2rem, 8.5vw, 8.8rem); */
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: .9;
+    letter-spacing: -.03em; 
+    margin-bottom: 2rem;
+}
+
+.hero-title span 
+{
+    display: block; 
+}
+
+.hero-title .surname 
+{ 
+    color: var(--color-text-accent); 
+}
+
+.hero-sub 
+{
+    position: relative;
+    font-family: var(--font-family-text-navbar);
+    font-size: .86rem;
+    color: var(--color-text-muted);
+    line-height: 1.8;
+    max-width: 500px;
+}
