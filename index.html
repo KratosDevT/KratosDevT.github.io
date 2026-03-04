@@ -1,55 +1,189 @@
-<html>
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Simone Trevisan | Game Programmer</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div id="cursor"></div>
-        <div id="cursor-ring"></div>
-        
-        <!-- Navbar -->
-        <nav id="navbar" class="navbar-container">
-            <a class="navbar-logo" href="">
-                <img src="/static/icons/stdev.png" alt="navbar-logo">
-            </a>
-            <ul class="navbar-links">
-                <li><a href="#aboutme">About Me</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#career">Career</a></li>
-                <li><a href="#contacts">Contacts</a></li>
-            </ul>
-            <a class="navbar-logo" href="">
-                <img src="/static/icons/stdev.png" alt="navbar-logo">
-            </a>
-        </nav>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simone | Game Programmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
 
-        <!-- Hero -->
-        <section id="hero" class="hero-container">
-            <canvas class="hero-canvas"></canvas>
-            <div class="hero-vignette"></div>
-            <div class="hero-fade"></div>
-            <div class="hero-tag">Game Programmer · C++ · Unreal Engine</div>
-            <h1 class="hero-title">
-                <span>Simone</span>
-                <span class="surname">Trevisan</span>
-            </h1>
-            <p class="hero-sub">
-                Gameplay Systems, Physics, FSM Architecture<br/>
-                Console and Desktop development<br/>
-            </p>
-            <div class="scroll-hint">Scroll</div>
-        </section>
-        
-    </body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<nav id="nav">
+  <a class="nav-logo" href="#">ST.DEV</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#career">Career</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-fade"></div>
+  <div class="hero-tag">Game Programmer · C++ · Unreal Engine</div>
+  <h1 class="hero-title">
+    <span>Simone</span>
+    <span class="yl">Trevisan</span>
+  </h1>
+  <p class="hero-sub">
+    Gameplay systems, FSM architecture<br/>
+    and Console Development<br/>
+  </p>
+  <div class="hero-click-hint" id="hero-hint">Click to set start · click again to solve</div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="sec-label">01 — About</div>
+  <h2 class="sec-title fi">Who I am</h2>
+  <div class="about-grid">
+    <div class="bio fi">
+      <p>I'm a <strong>game programmer</strong> with a strong focus on <strong>Unreal Engine 5</strong> and <strong>C++</strong>, specialised in gameplay systems, finite state machines, UI integration and console development for <strong>PlayStation platforms</strong>.</p><br/>
+      <p>Comfortable across the full range of game-side code — from <strong>Blueprint integration</strong> and component-based architecture to engine internals and performance-critical systems.</p><br/>
+      <p>Beyond code, I'm also a <strong>shareholder and co-owner</strong> of an Italian tech startup — which keeps my business and leadership thinking sharp alongside the technical craft.</p>
+    </div>
+    <div class="stat-grid fi">
+      <div class="stat-card"><div class="stat-n">C++</div><div class="stat-l">Primary language</div></div>
+      <div class="stat-card"><div class="stat-n">UE5</div><div class="stat-l">Engine of choice</div></div>
+      <div class="stat-card"><div class="stat-n">PS</div><div class="stat-l">Console dev</div></div>
+      <div class="stat-card"><div class="stat-n">FSM</div><div class="stat-l">Systems design</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+  <div class="sec-label">02 — Projects</div>
+  <h2 class="sec-title fi">Selected work</h2>
+  <div class="proj-list">
+    <div class="proj-row fi" data-project="0">
+      <span class="pnum">001</span>
+      <div><div class="proj-title">Coaching Tool</div><div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2024</span></div></div>
+      <div class="proj-right"><span class="ptag">FSM</span><span class="ptag">UMG</span><span class="proj-arrow">↗</span></div>
+    </div>
+    <div class="proj-row fi" data-project="1">
+      <span class="pnum">002</span>
+      <div><div class="proj-title">PlayStation SDK Integration</div><div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>PlayStation</span></div></div>
+      <div class="proj-right"><span class="ptag">Console</span><span class="ptag">SDK</span><span class="proj-arrow">↗</span></div>
+    </div>
+    <div class="proj-row fi" data-project="2">
+      <span class="pnum">003</span>
+      <div><div class="proj-title">UI Widget Framework</div><div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>UMG</span></div></div>
+      <div class="proj-right"><span class="ptag">UI</span><span class="ptag">Blueprints</span><span class="proj-arrow">↗</span></div>
+    </div>
+    <div class="proj-row fi" data-project="3">
+      <span class="pnum">004</span>
+      <div><div class="proj-title">[ Add your project ]</div><div class="proj-meta"><span>Engine</span>·<span>Tech</span>·<span>Year</span></div></div>
+      <div class="proj-right"><span class="ptag">Tag</span><span class="proj-arrow">↗</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="sec-label">03 — Skills</div>
+  <h2 class="sec-title fi">Expertise</h2>
+  <div class="skills-grid fi">
+    <div>
+      <div class="sg-title">Languages</div>
+      <div class="sk"><span class="sk-name">C++</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div></div></div>
+      <div class="sk"><span class="sk-name">Blueprints</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
+      <div class="sk"><span class="sk-name">Python</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
+      <div class="sk"><span class="sk-name">HLSL / Shaders</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div><div class="d"></div></div></div>
+    </div>
+    <div>
+      <div class="sg-title">Engines & Tools</div>
+      <div class="sk"><span class="sk-name">Unreal Engine 5</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div></div></div>
+      <div class="sk"><span class="sk-name">Visual Studio</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
+      <div class="sk"><span class="sk-name">Perforce / Git</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
+      <div class="sk"><span class="sk-name">Rider</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
+    </div>
+    <div>
+      <div class="sg-title">Platforms & Areas</div>
+      <div class="sk"><span class="sk-name">PlayStation (SDK)</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
+      <div class="sk"><span class="sk-name">Windows PC</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div></div></div>
+      <div class="sk"><span class="sk-name">Gameplay Systems</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
+      <div class="sk"><span class="sk-name">UI Programming</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Career -->
+<section id="career">
+  <div class="sec-label">04 — Career</div>
+  <h2 class="sec-title fi">Experience</h2>
+  <div class="timeline">
+    <div class="titem">
+      <div class="tdot"></div>
+      <div class="tperiod">2023 — Present</div>
+      <div class="trole">Game Programmer</div>
+      <div class="tco">[ Your current studio ] · Italy</div>
+      <div class="tdesc">Unreal Engine 5 development with focus on gameplay systems, FSM architecture, Blueprint/C++ integration, and PlayStation platform-specific features including .self build formats and SDK integration.</div>
+    </div>
+    <div class="titem">
+      <div class="tdot"></div>
+      <div class="tperiod">202X — 2023</div>
+      <div class="trole">[ Previous Role ]</div>
+      <div class="tco">[ Previous Company ] · City</div>
+      <div class="tdesc">Add your previous experience here.</div>
+    </div>
+    <div class="titem">
+      <div class="tdot"></div>
+      <div class="tperiod">Education</div>
+      <div class="trole">[ Degree / Course ]</div>
+      <div class="tco">[ Institution ]</div>
+      <div class="tdesc">Game development, computer science, or related field.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="sec-label">05 — Contact</div>
+  <h2 class="c-title fi">Let's build<span class="yl">something.</span></h2>
+  <a class="c-email fi" href="mailto:your@email.com">your@email.com</a>
+  <div class="socials fi">
+    <a class="sl" href="https://github.com/" target="_blank">GitHub</a>
+    <a class="sl" href="https://linkedin.com/" target="_blank">LinkedIn</a>
+    <a class="sl" href="#">Resume PDF</a>
+  </div>
+</section>
+
+<footer>
+  <p>Simone Trevisan — Game Programmer</p>
+  <p>© 2026 — Built from scratch</p>
+</footer>
+
+<div id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="slider-wrap">
+      <div class="slides" id="slides"></div>
+      <button class="sl-btn sl-prev" id="sl-prev">←</button>
+      <button class="sl-btn sl-next" id="sl-next">→</button>
+      <div class="sl-dots" id="sl-dots"></div>
+      <div class="sl-counter" id="sl-counter"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tags" id="modal-tags"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-year" id="modal-year"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="modal-links" id="modal-links"></div>
+    </div>
+  </div>
+</div>
+
+  <script src="script.js" defer></script>
+</body>
 </html>
-
-
-
-
-
