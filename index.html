@@ -1,459 +1,1559 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simone Trevisan | Game Programmer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <meta name="description"
+    content="Simone Trevisan — Game Programmer specialised in C++, Unreal Engine 5, FSM architecture and PlayStation console development. 7+ years of programming experience." />
+  <meta name="keywords"
+    content="Game Programmer, C++, Unreal Engine 5, UE5, FSM, PlayStation, Console Development, Gameplay Systems" />
+  <meta name="author" content="Simone Trevisan" />
+  <meta property="og:title" content="Simone Trevisan | Game Programmer" />
+  <meta property="og:description"
+    content="Building the systems players never see — but always feel. C++ · Unreal Engine 5 · PlayStation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.simonetrevisan.dev/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Simone Trevisan | Game Programmer" />
+  <meta name="twitter:description"
+    content="Building the systems players never see — but always feel. C++ · Unreal Engine 5 · PlayStation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap"
+    rel="stylesheet" />
   <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg:#080808; --bg2:#0f0f0f; --border:#1e1e1e; --text:#e8e8e8;
-  --muted:#555; --muted2:#2a2a2a; --accent:#e8ff5a;
-  --fd:'Syne',sans-serif; --fm:'DM Mono',monospace;
-}
-html { scroll-behavior: smooth; }
-body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; overflow-x:hidden; cursor:none; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* CURSOR */
-#cur { position:fixed; pointer-events:none; z-index:9999; width:10px; height:10px; border-radius:50%; background:var(--accent); mix-blend-mode:difference; transform:translate(-50%,-50%); transition:width .18s,height .18s; }
-#cur.big { width:44px; height:44px; }
-#cur-ring { position:fixed; pointer-events:none; z-index:9998; width:34px; height:34px; border-radius:50%; border:1px solid rgba(232,255,90,.28); transform:translate(-50%,-50%); }
+    :root {
+      --bg: #080808;
+      --bg2: #0f0f0f;
+      --border: #1e1e1e;
+      --text: #e8e8e8;
+      --muted: #555;
+      --muted2: #2a2a2a;
+      --accent: #e8ff5a;
+      --fd: 'Syne', sans-serif;
+      --fm: 'DM Mono', monospace;
+    }
 
-/* NAV */
-nav { position:fixed; inset:0 0 auto; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:1.4rem 3rem; background:rgba(8,8,8,.82); backdrop-filter:blur(14px); border-bottom:1px solid transparent; transition:border-color .3s; }
-nav.scrolled { border-color:var(--border); }
-.nav-logo { font-family:'DM Mono',monospace; font-size:.82rem; color:var(--accent); text-decoration:none; letter-spacing:.06em; }
-.nav-links { display:flex; gap:2.5rem; list-style:none; }
-.nav-links a { font-family:'DM Mono',monospace; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color .2s; }
-.nav-links a:hover { color:var(--text); }
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* HERO */
-#hero { position:relative; min-height:100vh; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; padding:0 3rem 5.5rem; }
-#hero-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:auto; }
-.hero-vignette { position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse 85% 85% at 50% 50%,transparent 35%,#080808 100%); }
-.hero-fade { position:absolute; bottom:0; left:0; right:0; height:55%; pointer-events:none; background:linear-gradient(to top,var(--bg) 25%,transparent); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-.hero-tag, .hero-title, .hero-sub, .scroll-hint { pointer-events: none; }
-.hero-tag { position:relative; font-family:'DM Mono',monospace; font-size:.75rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:1.4rem; display:flex; align-items:center; gap:.8rem; }
-.hero-tag::before { content:''; width:30px; height:1px; background:var(--accent); }
-.hero-title { position:relative; font-size: clamp(2.8rem, 6vw, 6rem); font-weight:800; line-height:.9; letter-spacing:-.03em; margin-bottom:2rem; }
-.hero-title span { display:block; }
-.hero-title .yl { color:var(--accent); }
-.hero-sub { position:relative; font-family:'DM Mono',monospace; font-size:.86rem; color:var(--muted); line-height:1.8; max-width:500px; }
-.scroll-hint { position:absolute; bottom:2.5rem; right:3rem; font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); writing-mode:vertical-rl; display:flex; align-items:center; gap:.7rem; }
-.scroll-hint::after { content:''; width:1px; height:54px; background:linear-gradient(to bottom,var(--muted),transparent); }
-.hero-click-hint { position:absolute; bottom:2.5rem; left:3rem; pointer-events:none; font-family:'DM Mono',monospace; font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(232,255,90,.45); display:flex; align-items:center; gap:.5rem; transition:opacity .4s; }
-.hero-click-hint::before { content:'◎'; font-size:.8rem; }
-.hero-click-hint.hide { opacity:0; }
+    /* CURSOR */
+    #cur {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%);
+      transition: width .18s, height .18s;
+    }
 
-/* SECTIONS */
-section { padding:7rem 3rem; }
-.sec-label { font-family:'DM Mono',monospace; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:.9rem; display:flex; align-items:center; gap:.75rem; }
-.sec-label::after { content:''; flex:1; max-width:72px; height:1px; background:var(--border); }
-.sec-title { font-size:clamp(2rem,4vw,3.4rem); font-weight:800; letter-spacing:-.025em; margin-bottom:4rem; line-height:1.05; }
+    #cur.big {
+      width: 44px;
+      height: 44px;
+    }
 
-/* ABOUT */
-#about { border-top:1px solid var(--border); }
-.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:start; }
-.bio { font-family:'DM Mono',monospace; font-size:.88rem; color:#999; line-height:1.95; }
-.bio strong { color:var(--text); font-weight:500; }
-.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
-.stat-card { background:var(--bg2); border:1px solid var(--border); padding:1.6rem 1.4rem; transition:border-color .25s,transform .25s; }
-.stat-card:hover { border-color:var(--accent); transform:translateY(-3px); }
-.stat-n { font-size:2.2rem; font-weight:800; color:var(--accent); line-height:1; margin-bottom:.4rem; }
-.stat-l { font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+    #cur-ring {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(232, 255, 90, .28);
+      transform: translate(-50%, -50%);
+    }
 
-/* PROJECTS */
-#projects { border-top:1px solid var(--border); }
-.proj-list { display:flex; flex-direction:column; }
-.proj-row { display:grid; grid-template-columns:72px 1fr auto; align-items:center; gap:2rem; padding:1.8rem 0; border-top:1px solid var(--border); cursor:none; position:relative; color:inherit; }
-.proj-row::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(232,255,90,.035)); opacity:0; transition:opacity .3s; pointer-events:none; }
-.proj-row:hover::before { opacity:1; }
-.proj-row:hover .proj-title { color:var(--accent); }
-.proj-row:hover .proj-arrow { transform:translate(4px,-4px); color:var(--accent); }
-.proj-row:hover .ptag { border-color:rgba(232,255,90,.5); color:var(--accent); }
-.pnum { font-family:'DM Mono',monospace; font-size:.7rem; color:var(--muted); letter-spacing:.06em; }
-.proj-title { font-size:1.35rem; font-weight:700; letter-spacing:-.01em; margin-bottom:.35rem; transition:color .2s; }
-.proj-meta { font-family:'DM Mono',monospace; font-size:.72rem; color:var(--muted); display:flex; gap:.8rem; flex-wrap:wrap; align-items:center; }
-.proj-right { display:flex; align-items:center; gap:.8rem; }
-.ptag { font-family:'DM Mono',monospace; font-size:.65rem; letter-spacing:.09em; text-transform:uppercase; padding:.2rem .55rem; border:1px solid var(--muted2); color:var(--muted); transition:border-color .2s,color .2s; white-space:nowrap; }
-.proj-arrow { font-size:1.1rem; color:var(--muted); transition:transform .25s,color .2s; }
+    /* NAV */
+    nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 3rem;
+      background: rgba(8, 8, 8, .82);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s;
+    }
 
-/* MORE TOGGLE */
-.more-toggle {
-  width:100%; display:flex; align-items:center; gap:1.4rem;
-  background:none; border:none; cursor:none;
-  padding:1.6rem 0; margin-top:.2rem;
-  color:var(--muted); transition:color .25s;
-}
-.more-toggle:hover { color:var(--accent); }
-.mt-line { flex:1; height:1px; background:currentColor; opacity:.2; transition:opacity .25s; }
-.more-toggle:hover .mt-line { opacity:.45; }
-.mt-label { font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; transition:color .25s; }
+    nav.scrolled {
+      border-color: var(--border);
+    }
 
-/* COLLAPSIBLE OTHER PROJECTS */
-.proj-others {
-  overflow:hidden;
-  max-height:0;
-  opacity:0;
-  transition:max-height .55s cubic-bezier(.4,0,.2,1), opacity .4s ease;
-}
-.proj-others.open {
-  max-height:900px;
-  opacity:1;
-}
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: .82rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: .06em;
+    }
 
-/* SKILLS */
-#skills { border-top:1px solid var(--border); background:var(--bg2); }
-.skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3rem 5rem; }
-.sg-title { font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:1.4rem; padding-bottom:.7rem; border-bottom:1px solid var(--border); }
-.sk { display:flex; justify-content:space-between; align-items:center; padding:.55rem 0; border-bottom:1px solid var(--border); }
-.sk-name { font-family:'DM Mono',monospace; font-size:.8rem; color:var(--text); }
-.dots { display:flex; gap:4px; }
-.d { width:6px; height:6px; border-radius:50%; background:var(--muted2); }
-.d.on { background:var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
 
-/* CAREER */
-#career { border-top:1px solid var(--border); }
-.timeline { position:relative; padding-left:2rem; margin-bottom:4rem; }
-.timeline::before { content:''; position:absolute; left:0; top:0; bottom:0; width:1px; background:linear-gradient(to bottom,var(--accent) 0%,var(--border) 60%,transparent); }
-.titem { position:relative; padding:0 0 3.5rem 2.5rem; opacity:0; transform:translateX(-18px); transition:opacity .6s,transform .6s; }
-.titem.vis { opacity:1; transform:none; }
-.tdot { position:absolute; left:-2rem; top:.4rem; width:9px; height:9px; border-radius:50%; background:var(--accent); transform:translateX(-4px); box-shadow:0 0 14px var(--accent); }
-.tperiod { font-family:'DM Mono',monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.45rem; }
-.trole { font-size:1.25rem; font-weight:700; margin-bottom:.2rem; }
-.tco { font-family:'DM Mono',monospace; font-size:.8rem; color:var(--muted); margin-bottom:.9rem; }
-.tdesc { font-family:'DM Mono',monospace; font-size:.8rem; color:#707070; line-height:1.85; max-width:540px; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
 
-/* EDUCATION BLOCK */
-.edu-block { border-top:1px solid var(--border); padding-top:3rem; }
-.edu-label { font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:1.8rem; display:flex; align-items:center; gap:.75rem; }
-.edu-label::after { content:''; flex:1; max-width:72px; height:1px; background:var(--border); }
-.edu-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0; }
-.edu-item { padding:1.4rem 2rem 1.4rem 0; border-right:1px solid var(--border); }
-.edu-item:last-child { border-right:none; padding-left:2rem; padding-right:0; }
-.edu-item:not(:first-child):not(:last-child) { padding-left:2rem; }
-.edu-year { font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.1em; color:var(--accent); margin-bottom:.5rem; }
-.edu-title { font-size:1rem; font-weight:700; margin-bottom:.3rem; letter-spacing:-.01em; }
-.edu-inst { font-family:'DM Mono',monospace; font-size:.72rem; color:var(--muted); line-height:1.6; }
+    .nav-links a:hover {
+      color: var(--text);
+    }
 
-/* CONTACT */
-#contact { border-top:1px solid var(--border); min-height:60vh; display:flex; flex-direction:column; justify-content:center; }
-.c-title { font-size:clamp(2.4rem,5vw,5rem); font-weight:800; letter-spacing:-.03em; line-height:1; margin-bottom:2rem; }
-.c-title .yl { color:var(--accent); display:block; }
-.c-email { font-family:'DM Mono',monospace; font-size:.88rem; color:var(--muted); text-decoration:none; border-bottom:1px solid var(--border); padding-bottom:.22rem; display:inline-block; transition:color .2s,border-color .2s; }
-.c-email:hover { color:var(--accent); border-color:var(--accent); }
-.socials { display:flex; gap:1.5rem; margin-top:2.5rem; }
-.sl { font-family:'DM Mono',monospace; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:.45rem; transition:color .2s; }
-.sl::before { content:'↗'; }
-.sl:hover { color:var(--accent); }
+    /* HERO */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 5.5rem;
+    }
 
-/* FOOTER */
-footer { padding:1.8rem 3rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; }
-footer p { font-family:'DM Mono',monospace; font-size:.7rem; color:var(--muted); letter-spacing:.05em; }
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+    }
 
-/* FADE IN */
-.fi { opacity:0; transform:translateY(28px); transition:opacity .65s,transform .65s; }
-.fi.vis { opacity:1; transform:none; }
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 35%, #080808 100%);
+    }
 
-/* MODAL */
-#modal-overlay { position:fixed; inset:0; z-index:500; background:rgba(4,4,4,.93); backdrop-filter:blur(18px); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .3s; }
-#modal-overlay.open { opacity:1; pointer-events:all; }
-.modal { position:relative; width:min(920px,94vw); max-height:92vh; background:var(--bg2); border:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; transform:translateY(28px) scale(.97); transition:transform .38s cubic-bezier(.22,1,.36,1); }
-#modal-overlay.open .modal { transform:none; }
-.slider-wrap { position:relative; overflow:hidden; height:440px; flex-shrink:0; background:#080808; }
-.slides { display:flex; height:100%; transition:transform .52s cubic-bezier(.4,0,.2,1); }
-.slide { min-width:100%; height:100%; flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
-.slide-bg { position:absolute; inset:0; background-image:linear-gradient(rgba(232,255,90,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(232,255,90,0.04) 1px,transparent 1px); background-size:40px 40px; }
-.slide-color { position:absolute; inset:0; }
-.slide-label { position:relative; z-index:2; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(232,255,90,.6); border:1px solid rgba(232,255,90,.2); padding:.4rem .9rem; }
-/* Diagram slide */
-.slide-diagram { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
-.slide-diagram svg { width:100%; height:100%; max-width:700px; }
+    .hero-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 55%;
+      pointer-events: none;
+      background: linear-gradient(to top, var(--bg) 25%, transparent);
+    }
 
-.sl-btn { position:absolute; top:50%; transform:translateY(-50%); z-index:10; background:rgba(8,8,8,.7); border:1px solid var(--border); color:var(--text); width:46px; height:46px; display:flex; align-items:center; justify-content:center; font-size:1rem; cursor:none; transition:background .2s,border-color .2s,color .2s; }
-.sl-btn:hover { background:rgba(232,255,90,.08); border-color:var(--accent); color:var(--accent); }
-.sl-prev { left:1.2rem; }
-.sl-next { right:1.2rem; }
-.sl-dots { position:absolute; bottom:1.1rem; left:50%; transform:translateX(-50%); display:flex; gap:7px; z-index:10; }
-.sl-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); cursor:none; transition:background .2s,transform .2s; }
-.sl-dot.on { background:var(--accent); transform:scale(1.5); }
-.sl-counter { position:absolute; top:1rem; right:1rem; z-index:10; font-family:'DM Mono',monospace; font-size:.65rem; letter-spacing:.1em; color:var(--muted); background:rgba(8,8,8,.65); padding:.25rem .65rem; }
-.modal-body { padding:2rem 2.5rem 2.5rem; overflow-y:auto; flex:1; }
-.modal-tags { display:flex; gap:.55rem; flex-wrap:wrap; margin-bottom:1.1rem; }
-.modal-tag { font-family:'DM Mono',monospace; font-size:.63rem; letter-spacing:.1em; text-transform:uppercase; padding:.22rem .6rem; border:1px solid rgba(232,255,90,.3); color:var(--accent); }
-.modal-title { font-size:1.75rem; font-weight:800; letter-spacing:-.02em; margin-bottom:.5rem; }
-.modal-year { font-family:'DM Mono',monospace; font-size:.72rem; color:var(--muted); letter-spacing:.08em; margin-bottom:1.3rem; }
-.modal-desc { font-family:'DM Mono',monospace; font-size:.83rem; color:#909090; line-height:1.95; }
-.modal-links { display:flex; gap:1rem; margin-top:1.8rem; }
-.modal-link { font-family:'DM Mono',monospace; font-size:.74rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); text-decoration:none; border:1px solid rgba(232,255,90,.35); padding:.55rem 1.2rem; transition:background .2s; }
-.modal-link:hover { background:rgba(232,255,90,.08); }
-.modal-close { position:absolute; top:1rem; right:1rem; z-index:20; width:38px; height:38px; background:rgba(8,8,8,.85); border:1px solid var(--border); color:var(--muted); font-size:1rem; display:flex; align-items:center; justify-content:center; cursor:none; transition:color .2s,border-color .2s; }
-.modal-close:hover { color:var(--accent); border-color:var(--accent); }
+    .hero-tag,
+    .hero-title,
+    .hero-sub,
+    .scroll-hint {
+      pointer-events: none;
+    }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  nav{padding:1.2rem 1.5rem;}
-  #hero,section{padding-left:1.5rem;padding-right:1.5rem;}
-  .about-grid{grid-template-columns:1fr;gap:3rem;}
-  .skills-grid{grid-template-columns:1fr 1fr;gap:2rem 3rem;}
-  .proj-row{grid-template-columns:48px 1fr auto;gap:1rem;}
-  .slider-wrap{height:280px;}
-  .modal-body{padding:1.5rem;}
-  .edu-grid{grid-template-columns:1fr;gap:0;}
-  .edu-item{border-right:none;border-bottom:1px solid var(--border);padding:1.2rem 0!important;}
-  .edu-item:last-child{border-bottom:none;}
-}
-@media(max-width:600px){
-  .nav-links{display:none;}
-  .hero-title{font-size:3rem;}
-  .skills-grid{grid-template-columns:1fr;}
-  .proj-row{grid-template-columns:1fr auto;}
-  .pnum{display:none;}
-  footer{flex-direction:column;gap:.8rem;}
-}
+    .hero-tag {
+      position: relative;
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
 
-</style>
+    .hero-tag::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-title {
+      position: relative;
+      font-size: clamp(2.8rem, 6vw, 6rem);
+      font-weight: 800;
+      line-height: .9;
+      letter-spacing: -.03em;
+      margin-bottom: 2rem;
+    }
+
+    .hero-title span {
+      display: block;
+    }
+
+    .hero-title .yl {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      position: relative;
+      font-family: 'DM Mono', monospace;
+      font-size: .86rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 500px;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 3rem;
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 54px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+    }
+
+    .hero-click-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 3rem;
+      pointer-events: none;
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(232, 255, 90, .45);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      transition: opacity .4s;
+    }
+
+    .hero-click-hint::before {
+      content: '◎';
+      font-size: .8rem;
+    }
+
+    .hero-click-hint.hide {
+      opacity: 0;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 7rem 3rem;
+    }
+
+    .sec-label {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .9rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .sec-label::after {
+      content: '';
+      flex: 1;
+      max-width: 72px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .sec-title {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -.025em;
+      margin-bottom: 4rem;
+      line-height: 1.05;
+    }
+
+    /* ABOUT */
+    #about {
+      border-top: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .bio {
+      font-family: 'DM Mono', monospace;
+      font-size: .88rem;
+      color: #999;
+      line-height: 1.95;
+    }
+
+    .bio strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1.6rem 1.4rem;
+      transition: border-color .25s, transform .25s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .stat-n {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: .4rem;
+    }
+
+    .stat-l {
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* PROJECTS */
+    #projects {
+      border-top: 1px solid var(--border);
+    }
+
+    .proj-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .proj-row {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.8rem 0;
+      border-top: 1px solid var(--border);
+      cursor: none;
+      position: relative;
+      color: inherit;
+    }
+
+    .proj-row::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(232, 255, 90, .035));
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+    }
+
+    .proj-row:hover::before {
+      opacity: 1;
+    }
+
+    .proj-row:hover .proj-title {
+      color: var(--accent);
+    }
+
+    .proj-row:hover .proj-arrow {
+      transform: translate(4px, -4px);
+      color: var(--accent);
+    }
+
+    .proj-row:hover .ptag {
+      border-color: rgba(232, 255, 90, .5);
+      color: var(--accent);
+    }
+
+    .pnum {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+
+    .proj-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      margin-bottom: .35rem;
+      transition: color .2s;
+    }
+
+    .proj-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      color: var(--muted);
+      display: flex;
+      gap: .8rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .proj-right {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .ptag {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      padding: .2rem .55rem;
+      border: 1px solid var(--muted2);
+      color: var(--muted);
+      transition: border-color .2s, color .2s;
+      white-space: nowrap;
+    }
+
+    .proj-arrow {
+      font-size: 1.1rem;
+      color: var(--muted);
+      transition: transform .25s, color .2s;
+    }
+
+    /* MORE TOGGLE */
+    .more-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      background: none;
+      border: none;
+      cursor: none;
+      padding: 1.6rem 0;
+      margin-top: .2rem;
+      color: var(--muted);
+      transition: color .25s;
+    }
+
+    .more-toggle:hover {
+      color: var(--accent);
+    }
+
+    .mt-line {
+      flex: 1;
+      height: 1px;
+      background: currentColor;
+      opacity: .2;
+      transition: opacity .25s;
+    }
+
+    .more-toggle:hover .mt-line {
+      opacity: .45;
+    }
+
+    .mt-label {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color .25s;
+    }
+
+    /* COLLAPSIBLE OTHER PROJECTS */
+    .proj-others {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height .55s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
+    }
+
+    .proj-others.open {
+      max-height: 900px;
+      opacity: 1;
+    }
+
+    /* SKILLS */
+    #skills {
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem 5rem;
+    }
+
+    .sg-title {
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.4rem;
+      padding-bottom: .7rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sk {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .55rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sk-name {
+      font-family: 'DM Mono', monospace;
+      font-size: .8rem;
+      color: var(--text);
+    }
+
+    .dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .d {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--muted2);
+    }
+
+    .d.on {
+      background: var(--accent);
+    }
+
+    /* CAREER */
+    #career {
+      border-top: 1px solid var(--border);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent) 0%, var(--border) 60%, transparent);
+    }
+
+    .titem {
+      position: relative;
+      padding: 0 0 3.5rem 2.5rem;
+      opacity: 0;
+      transform: translateX(-18px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .titem.vis {
+      opacity: 1;
+      transform: none;
+    }
+
+    .tdot {
+      position: absolute;
+      left: -2rem;
+      top: .4rem;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translateX(-4px);
+      box-shadow: 0 0 14px var(--accent);
+    }
+
+    .tperiod {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .45rem;
+    }
+
+    .trole {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: .2rem;
+    }
+
+    .tco {
+      font-family: 'DM Mono', monospace;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: .9rem;
+    }
+
+    .tdesc {
+      font-family: 'DM Mono', monospace;
+      font-size: .8rem;
+      color: #707070;
+      line-height: 1.85;
+      max-width: 540px;
+    }
+
+    /* EDUCATION BLOCK */
+    .edu-block {
+      border-top: 1px solid var(--border);
+      padding-top: 3rem;
+    }
+
+    .edu-label {
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .edu-label::after {
+      content: '';
+      flex: 1;
+      max-width: 72px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    .edu-item {
+      padding: 1.4rem 2rem 1.4rem 0;
+      border-right: 1px solid var(--border);
+    }
+
+    .edu-item:last-child {
+      border-right: none;
+      padding-left: 2rem;
+      padding-right: 0;
+    }
+
+    .edu-item:not(:first-child):not(:last-child) {
+      padding-left: 2rem;
+    }
+
+    .edu-year {
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      letter-spacing: .1em;
+      color: var(--accent);
+      margin-bottom: .5rem;
+    }
+
+    .edu-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .3rem;
+      letter-spacing: -.01em;
+    }
+
+    .edu-inst {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* CONTACT */
+    #contact {
+      border-top: 1px solid var(--border);
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .c-title {
+      font-size: clamp(2.4rem, 5vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1;
+      margin-bottom: 2rem;
+    }
+
+    .c-title .yl {
+      color: var(--accent);
+      display: block;
+    }
+
+    .c-email {
+      font-family: 'DM Mono', monospace;
+      font-size: .88rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: .22rem;
+      display: inline-block;
+      transition: color .2s, border-color .2s;
+    }
+
+    .c-email:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .socials {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .sl {
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      transition: color .2s;
+    }
+
+    .sl::before {
+      content: '↗';
+    }
+
+    .sl:hover {
+      color: var(--accent);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 1.8rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: .05em;
+    }
+
+    /* FADE IN */
+    .fi {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s, transform .65s;
+    }
+
+    .fi.vis {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* MODAL */
+    #modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(4, 4, 4, .93);
+      backdrop-filter: blur(18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+
+    #modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      position: relative;
+      width: min(920px, 94vw);
+      max-height: 92vh;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(28px) scale(.97);
+      transition: transform .38s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    #modal-overlay.open .modal {
+      transform: none;
+    }
+
+    .slider-wrap {
+      position: relative;
+      overflow: hidden;
+      height: 440px;
+      flex-shrink: 0;
+      background: #080808;
+    }
+
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform .52s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-bg {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(232, 255, 90, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(232, 255, 90, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .slide-color {
+      position: absolute;
+      inset: 0;
+    }
+
+    .slide-label {
+      position: relative;
+      z-index: 2;
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(232, 255, 90, .6);
+      border: 1px solid rgba(232, 255, 90, .2);
+      padding: .4rem .9rem;
+    }
+
+    /* Diagram slide */
+    .slide-diagram {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide-diagram svg {
+      width: 100%;
+      height: 100%;
+      max-width: 700px;
+    }
+
+    .sl-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(8, 8, 8, .7);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: none;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+
+    .sl-btn:hover {
+      background: rgba(232, 255, 90, .08);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .sl-prev {
+      left: 1.2rem;
+    }
+
+    .sl-next {
+      right: 1.2rem;
+    }
+
+    .sl-dots {
+      position: absolute;
+      bottom: 1.1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+      z-index: 10;
+    }
+
+    .sl-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+      cursor: none;
+      transition: background .2s, transform .2s;
+    }
+
+    .sl-dot.on {
+      background: var(--accent);
+      transform: scale(1.5);
+    }
+
+    .sl-counter {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10;
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+      background: rgba(8, 8, 8, .65);
+      padding: .25rem .65rem;
+    }
+
+    .modal-body {
+      padding: 2rem 2.5rem 2.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-tags {
+      display: flex;
+      gap: .55rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.1rem;
+    }
+
+    .modal-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: .63rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .22rem .6rem;
+      border: 1px solid rgba(232, 255, 90, .3);
+      color: var(--accent);
+    }
+
+    .modal-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+    }
+
+    .modal-year {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      color: var(--muted);
+      letter-spacing: .08em;
+      margin-bottom: 1.3rem;
+    }
+
+    .modal-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: .83rem;
+      color: #909090;
+      line-height: 1.95;
+    }
+
+    .modal-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.8rem;
+    }
+
+    .modal-link {
+      font-family: 'DM Mono', monospace;
+      font-size: .74rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(232, 255, 90, .35);
+      padding: .55rem 1.2rem;
+      transition: background .2s;
+    }
+
+    .modal-link:hover {
+      background: rgba(232, 255, 90, .08);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 20;
+      width: 38px;
+      height: 38px;
+      background: rgba(8, 8, 8, .85);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: color .2s, border-color .2s;
+    }
+
+    .modal-close:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:900px) {
+      nav {
+        padding: 1.2rem 1.5rem;
+      }
+
+      #hero,
+      section {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem 3rem;
+      }
+
+      .proj-row {
+        grid-template-columns: 48px 1fr auto;
+        gap: 1rem;
+      }
+
+      .slider-wrap {
+        height: 280px;
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+      }
+
+      .edu-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .edu-item {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 1.2rem 0 !important;
+      }
+
+      .edu-item:last-child {
+        border-bottom: none;
+      }
+
+      /* restore default cursor on touch/mobile */
+      body {
+        cursor: auto;
+      }
+
+      #cur,
+      #cur-ring {
+        display: none;
+      }
+
+      a,
+      button,
+      .proj-row,
+      .stat-card,
+      .sl-btn,
+      .modal-close,
+      .more-toggle,
+      .sl-dot {
+        cursor: pointer;
+      }
+    }
+
+    @media(max-width:600px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .proj-row {
+        grid-template-columns: 1fr auto;
+      }
+
+      .pnum {
+        display: none;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: .8rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div id="cur"></div>
-<div id="cur-ring"></div>
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
 
-<nav id="nav">
-  <a class="nav-logo" href="#">ST.DEV</a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#career">Career</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+  <nav id="nav">
+    <a class="nav-logo" href="#">ST.DEV</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#career">Career</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-<section id="hero">
-  <canvas id="hero-canvas"></canvas>
-  <div class="hero-vignette"></div>
-  <div class="hero-fade"></div>
-  <div class="hero-tag">Game Programmer · C++ · Unreal Engine</div>
-  <h1 class="hero-title">
-    <span>Simone</span>
-    <span class="yl">Trevisan</span>
-  </h1>
-  <p class="hero-sub">
-    Building the systems players<br/>
-    never see — but always feel.
-  </p>
-  <div class="hero-click-hint" id="hero-hint">Click to set start · click again to solve</div>
-  <div class="scroll-hint">Scroll</div>
-</section>
+  <section id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-vignette"></div>
+    <div class="hero-fade"></div>
+    <div class="hero-tag">Game Programmer · C++ · Unreal Engine</div>
+    <h1 class="hero-title">
+      <span>Simone</span>
+      <span class="yl">Trevisan</span>
+    </h1>
+    <p class="hero-sub">
+      Building the systems players<br />
+      never see — but always feel.
+    </p>
+    <div class="hero-click-hint" id="hero-hint">Click to set start · click again to solve</div>
+    <div class="scroll-hint">Scroll</div>
+  </section>
 
-<!-- About -->
-<section id="about">
-  <div class="sec-label">01 — About</div>
-  <h2 class="sec-title fi">Who I am</h2>
-  <div class="about-grid">
-    <div class="bio fi">
-      <p>I'm a <strong>game programmer</strong> with a solid background in <strong>Software Engineering</strong> (2018–2025) and a <strong>Master in Computer Game Development</strong> at Università di Verona.</p><br/>
-      <p>My specialisation is <strong>Gameplay Development</strong> — with a particular focus on <strong>C++</strong> and <strong>Unreal Engine 5</strong>: gameplay mechanics, FSM architecture, AI systems, physics programming, and performance-critical code. Comfortable across UE5 internals, Blueprint integration, component-based architecture, and console development for <strong>PlayStation platforms</strong>.</p><br/>
-      <p>My approach is analytical and quality-driven — from refining game mechanics to building robust tools that tighten the development cycle.</p>
-    </div>
-    <div class="stat-grid fi">
-      <div class="stat-card"><div class="stat-n">7+</div><div class="stat-l">Years of programming</div></div>
-      <div class="stat-card"><div class="stat-n">6+</div><div class="stat-l">GameDev projects</div></div>
-      <div class="stat-card"><div class="stat-n">2</div><div class="stat-l">Game engines</div></div>
-      <div class="stat-card"><div class="stat-n">PS</div><div class="stat-l">Console dev</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- Projects -->
-<section id="projects">
-  <div class="sec-label">02 — Projects</div>
-  <h2 class="sec-title fi">Selected work</h2>
-
-  <div class="proj-list" id="proj-featured">
-    <div class="proj-row fi" data-project="0">
-      <span class="pnum">001</span>
-      <div><div class="proj-title">Overdrill</div><div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2025</span></div></div>
-      <div class="proj-right"><span class="ptag">Twin-Stick</span><span class="ptag">Tower Defense</span><span class="proj-arrow">↗</span></div>
-    </div>
-    <div class="proj-row fi" data-project="1">
-      <span class="pnum">002</span>
-      <div><div class="proj-title">Coaching Tool</div><div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2024</span></div></div>
-      <div class="proj-right"><span class="ptag">FSM</span><span class="ptag">UMG</span><span class="proj-arrow">↗</span></div>
-    </div>
-    <div class="proj-row fi" data-project="2">
-      <span class="pnum">003</span>
-      <div><div class="proj-title">PlayStation SDK Integration</div><div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>PlayStation</span></div></div>
-      <div class="proj-right"><span class="ptag">Console</span><span class="ptag">SDK</span><span class="proj-arrow">↗</span></div>
-    </div>
-    <div class="proj-row fi" data-project="3">
-      <span class="pnum">004</span>
-      <div><div class="proj-title">Soccer AI System</div><div class="proj-meta"><span>Unity</span>·<span>C#</span>·<span>2024</span></div></div>
-      <div class="proj-right"><span class="ptag">FSM</span><span class="ptag">Steering AI</span><span class="proj-arrow">↗</span></div>
-    </div>
-  </div>
-
-  <button class="more-toggle fi" id="proj-toggle" aria-expanded="false">
-    <span class="mt-line"></span>
-    <span class="mt-label" id="proj-toggle-label">+ 5 more projects</span>
-    <span class="mt-line"></span>
-  </button>
-
-  <div class="proj-list proj-others" id="proj-others" aria-hidden="true">
-    <div class="proj-row" data-project="4">
-      <span class="pnum">005</span>
-      <div><div class="proj-title">Unreal Platform Game</div><div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2024</span></div></div>
-      <div class="proj-right"><span class="ptag">AI NavMesh</span><span class="ptag">FSM</span><span class="proj-arrow">↗</span></div>
-    </div>
-    <div class="proj-row" data-project="5">
-      <span class="pnum">006</span>
-      <div><div class="proj-title">BB8 Physics Simulation</div><div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2024</span></div></div>
-      <div class="proj-right"><span class="ptag">Physics</span><span class="ptag">CharMovement</span><span class="proj-arrow">↗</span></div>
-    </div>
-    <div class="proj-row" data-project="6">
-      <span class="pnum">007</span>
-      <div><div class="proj-title">Physics-Based Networking</div><div class="proj-meta"><span>Unity</span>·<span>C#</span>·<span>Photon PUN</span></div></div>
-      <div class="proj-right"><span class="ptag">Multiplayer</span><span class="ptag">Prediction</span><span class="proj-arrow">↗</span></div>
-    </div>
-    <div class="proj-row" data-project="7">
-      <span class="pnum">008</span>
-      <div><div class="proj-title">Memory Manager</div><div class="proj-meta"><span>C++</span>·<span>2023</span></div></div>
-      <div class="proj-right"><span class="ptag">Allocator</span><span class="ptag">Performance</span><span class="proj-arrow">↗</span></div>
-    </div>
-    <div class="proj-row" data-project="8">
-      <span class="pnum">009</span>
-      <div><div class="proj-title">FMod Wrapper Library</div><div class="proj-meta"><span>C++</span>·<span>FMOD API</span>·<span>2023</span></div></div>
-      <div class="proj-right"><span class="ptag">Audio</span><span class="ptag">Library</span><span class="proj-arrow">↗</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- Skills -->
-<section id="skills">
-  <div class="sec-label">03 — Skills</div>
-  <h2 class="sec-title fi">Expertise</h2>
-  <div class="skills-grid fi">
-    <div>
-      <div class="sg-title">Languages</div>
-      <div class="sk"><span class="sk-name">C++</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div></div></div>
-      <div class="sk"><span class="sk-name">Blueprints</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
-      <div class="sk"><span class="sk-name">C# (Unity)</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
-      <div class="sk"><span class="sk-name">HLSL / Shaders</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div><div class="d"></div></div></div>
-    </div>
-    <div>
-      <div class="sg-title">Engines & Tools</div>
-      <div class="sk"><span class="sk-name">Unreal Engine 5</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div></div></div>
-      <div class="sk"><span class="sk-name">Unity</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
-      <div class="sk"><span class="sk-name">Visual Studio / Rider</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
-      <div class="sk"><span class="sk-name">Perforce / Git</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
-    </div>
-    <div>
-      <div class="sg-title">Platforms & Areas</div>
-      <div class="sk"><span class="sk-name">PlayStation (SDK)</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
-      <div class="sk"><span class="sk-name">Gameplay Systems</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
-      <div class="sk"><span class="sk-name">AI & Physics</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
-      <div class="sk"><span class="sk-name">Networking</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div><div class="d"></div><div class="d"></div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- Career -->
-<section id="career">
-  <div class="sec-label">04 — Career</div>
-  <h2 class="sec-title fi">Experience</h2>
-
-  <div class="timeline">
-    <div class="titem">
-      <div class="tdot"></div>
-      <div class="tperiod">2023 — Present</div>
-      <div class="trole">Game Programmer</div>
-      <div class="tco">[ Current Studio ] · Italy</div>
-      <div class="tdesc">Unreal Engine 5 development with focus on gameplay systems, FSM architecture, Blueprint/C++ integration, and PlayStation platform features including .self build formats, SDK integration, and the full console build pipeline (Linux ↔ Windows via SSH).</div>
-    </div>
-    <div class="titem">
-      <div class="tdot"></div>
-      <div class="tperiod">2018 — 2025</div>
-      <div class="trole">Software Engineer</div>
-      <div class="tco">[ Previous Company ] · Italy</div>
-      <div class="tdesc">7 years of professional software engineering with focus on scalable architectures and performance optimisation. Strong foundation in system design and clean code practices — all directly transferable to game development.</div>
-    </div>
-    <div class="titem">
-      <div class="tdot"></div>
-      <div class="tperiod">2012 — 2018</div>
-      <div class="trole">Private Teacher · University students</div>
-      <div class="tco">Rome, Italy</div>
-      <div class="tdesc">Tutoring engineering students at Tor Vergata in Analysis, Physics, Electronics, and Electrical Engineering while completing both engineering degrees.</div>
-    </div>
-  </div>
-
-  <div class="edu-block fi">
-    <div class="edu-label">Education</div>
-    <div class="edu-grid">
-      <div class="edu-item">
-        <div class="edu-year">2025</div>
-        <div class="edu-title">Master in Computer Game Development</div>
-        <div class="edu-inst">Università di Verona · Global Game Jam 2025</div>
+  <!-- About -->
+  <section id="about">
+    <div class="sec-label">01 — About</div>
+    <h2 class="sec-title fi">Who I am</h2>
+    <div class="about-grid">
+      <div class="bio fi">
+        <p>I'm a <strong>game programmer</strong> with a solid background in <strong>Software Engineering</strong>
+          (2018–2025) and a <strong>Master in Computer Game Development</strong> at Università di Verona.</p><br />
+        <p>My specialisation is <strong>Gameplay Development</strong> — with a particular focus on <strong>C++</strong>
+          and <strong>Unreal Engine 5</strong>: gameplay mechanics, FSM architecture, AI systems, physics programming,
+          and performance-critical code. Comfortable across UE5 internals, Blueprint integration, component-based
+          architecture, and console development for <strong>PlayStation platforms</strong>.</p><br />
+        <p>My approach is analytical and quality-driven — from refining game mechanics to building robust tools that
+          tighten the development cycle.</p>
       </div>
-      <div class="edu-item">
-        <div class="edu-year">2018</div>
-        <div class="edu-title">Master's Degree in Engineering</div>
-        <div class="edu-inst">Università Roma 2 – Tor Vergata</div>
-      </div>
-      <div class="edu-item">
-        <div class="edu-year">2012</div>
-        <div class="edu-title">Bachelor's Degree in Engineering</div>
-        <div class="edu-inst">Università Roma 2 – Tor Vergata · 1° IBEC Competition</div>
+      <div class="stat-grid fi">
+        <div class="stat-card">
+          <div class="stat-n">7+</div>
+          <div class="stat-l">Years of programming</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">6+</div>
+          <div class="stat-l">GameDev projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">2</div>
+          <div class="stat-l">Game engines</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">PS</div>
+          <div class="stat-l">Console dev</div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Contact -->
-<section id="contact">
-  <div class="sec-label">05 — Contact</div>
-  <h2 class="c-title fi">Let's build<span class="yl">something.</span></h2>
-  <a class="c-email fi" href="mailto:your@email.com">your@email.com</a>
-  <div class="socials fi">
-    <a class="sl" href="https://github.com/" target="_blank">GitHub</a>
-    <a class="sl" href="https://linkedin.com/" target="_blank">LinkedIn</a>
-    <a class="sl" href="#">Resume PDF</a>
-  </div>
-</section>
+  <!-- Projects -->
+  <section id="projects">
+    <div class="sec-label">02 — Projects</div>
+    <h2 class="sec-title fi">Selected work</h2>
 
-<footer>
-  <p>Simone Trevisan — Game Programmer</p>
-  <p>© 2026 — Built from scratch</p>
-</footer>
-
-<div id="modal-overlay">
-  <div class="modal">
-    <button class="modal-close" id="modal-close">✕</button>
-    <div class="slider-wrap">
-      <div class="slides" id="slides"></div>
-      <button class="sl-btn sl-prev" id="sl-prev">←</button>
-      <button class="sl-btn sl-next" id="sl-next">→</button>
-      <div class="sl-dots" id="sl-dots"></div>
-      <div class="sl-counter" id="sl-counter"></div>
+    <div class="proj-list" id="proj-featured">
+      <div class="proj-row fi" data-project="0">
+        <span class="pnum">001</span>
+        <div>
+          <div class="proj-title">Overdrill</div>
+          <div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2025</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">Twin-Stick</span><span class="ptag">Tower Defense</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
+      <div class="proj-row fi" data-project="1">
+        <span class="pnum">002</span>
+        <div>
+          <div class="proj-title">Coaching Tool</div>
+          <div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2024</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">FSM</span><span class="ptag">UMG</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
+      <div class="proj-row fi" data-project="2">
+        <span class="pnum">003</span>
+        <div>
+          <div class="proj-title">PlayStation SDK Integration</div>
+          <div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>PlayStation</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">Console</span><span class="ptag">SDK</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
+      <div class="proj-row fi" data-project="3">
+        <span class="pnum">004</span>
+        <div>
+          <div class="proj-title">Soccer AI System</div>
+          <div class="proj-meta"><span>Unity</span>·<span>C#</span>·<span>2024</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">FSM</span><span class="ptag">Steering AI</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
     </div>
-    <div class="modal-body">
-      <div class="modal-tags" id="modal-tags"></div>
-      <div class="modal-title" id="modal-title"></div>
-      <div class="modal-year" id="modal-year"></div>
-      <div class="modal-desc" id="modal-desc"></div>
-      <div class="modal-links" id="modal-links"></div>
+
+    <button class="more-toggle fi" id="proj-toggle" aria-expanded="false">
+      <span class="mt-line"></span>
+      <span class="mt-label" id="proj-toggle-label">+ 5 more projects</span>
+      <span class="mt-line"></span>
+    </button>
+
+    <div class="proj-list proj-others" id="proj-others" aria-hidden="true">
+      <div class="proj-row" data-project="4">
+        <span class="pnum">005</span>
+        <div>
+          <div class="proj-title">Unreal Platform Game</div>
+          <div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2024</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">AI NavMesh</span><span class="ptag">FSM</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
+      <div class="proj-row" data-project="5">
+        <span class="pnum">006</span>
+        <div>
+          <div class="proj-title">BB8 Physics Simulation</div>
+          <div class="proj-meta"><span>Unreal Engine 5</span>·<span>C++</span>·<span>2024</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">Physics</span><span class="ptag">CharMovement</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
+      <div class="proj-row" data-project="6">
+        <span class="pnum">007</span>
+        <div>
+          <div class="proj-title">Physics-Based Networking</div>
+          <div class="proj-meta"><span>Unity</span>·<span>C#</span>·<span>Photon PUN</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">Multiplayer</span><span class="ptag">Prediction</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
+      <div class="proj-row" data-project="7">
+        <span class="pnum">008</span>
+        <div>
+          <div class="proj-title">Memory Manager</div>
+          <div class="proj-meta"><span>C++</span>·<span>2023</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">Allocator</span><span class="ptag">Performance</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
+      <div class="proj-row" data-project="8">
+        <span class="pnum">009</span>
+        <div>
+          <div class="proj-title">FMod Wrapper Library</div>
+          <div class="proj-meta"><span>C++</span>·<span>FMOD API</span>·<span>2023</span></div>
+        </div>
+        <div class="proj-right"><span class="ptag">Audio</span><span class="ptag">Library</span><span
+            class="proj-arrow">↗</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="sec-label">03 — Skills</div>
+    <h2 class="sec-title fi">Expertise</h2>
+    <div class="skills-grid fi">
+      <div>
+        <div class="sg-title">Languages</div>
+        <div class="sk"><span class="sk-name">C++</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">Blueprints</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">C# (Unity)</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">HLSL / Shaders</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+            <div class="d"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sg-title">Engines & Tools</div>
+        <div class="sk"><span class="sk-name">Unreal Engine 5</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">Unity</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">Visual Studio / Rider</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">Perforce / Git</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sg-title">Platforms & Areas</div>
+        <div class="sk"><span class="sk-name">PlayStation (SDK)</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">Gameplay Systems</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">AI & Physics</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+        <div class="sk"><span class="sk-name">Networking</span>
+          <div class="dots">
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d on"></div>
+            <div class="d"></div>
+            <div class="d"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Career -->
+  <section id="career">
+    <div class="sec-label">04 — Career</div>
+    <h2 class="sec-title fi">Experience</h2>
+
+    <div class="timeline">
+      <div class="titem">
+        <div class="tdot"></div>
+        <div class="tperiod">2023 — Present</div>
+        <div class="trole">Game Programmer</div>
+        <div class="tco">[ Current Studio ] · Italy</div>
+        <div class="tdesc">Unreal Engine 5 development with focus on gameplay systems, FSM architecture, Blueprint/C++
+          integration, and PlayStation platform features including .self build formats, SDK integration, and the full
+          console build pipeline (Linux ↔ Windows via SSH).</div>
+      </div>
+      <div class="titem">
+        <div class="tdot"></div>
+        <div class="tperiod">2018 — 2025</div>
+        <div class="trole">Software Engineer</div>
+        <div class="tco">[ Previous Company ] · Italy</div>
+        <div class="tdesc">7 years of professional software engineering with focus on scalable architectures and
+          performance optimisation. Strong foundation in system design and clean code practices — all directly
+          transferable to game development.</div>
+      </div>
+      <div class="titem">
+        <div class="tdot"></div>
+        <div class="tperiod">2012 — 2018</div>
+        <div class="trole">Private Teacher · University students</div>
+        <div class="tco">Rome, Italy</div>
+        <div class="tdesc">Tutoring engineering students at Tor Vergata in Analysis, Physics, Electronics, and
+          Electrical Engineering while completing both engineering degrees.</div>
+      </div>
+    </div>
+
+    <div class="edu-block fi">
+      <div class="edu-label">Education</div>
+      <div class="edu-grid">
+        <div class="edu-item">
+          <div class="edu-year">2025</div>
+          <div class="edu-title">Master in Computer Game Development</div>
+          <div class="edu-inst">Università di Verona · Global Game Jam 2025</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-year">2018</div>
+          <div class="edu-title">Master's Degree in Engineering</div>
+          <div class="edu-inst">Università Roma 2 – Tor Vergata</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-year">2012</div>
+          <div class="edu-title">Bachelor's Degree in Engineering</div>
+          <div class="edu-inst">Università Roma 2 – Tor Vergata · 1° IBEC Competition</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="sec-label">05 — Contact</div>
+    <h2 class="c-title fi">Let's build<span class="yl">something.</span></h2>
+    <a class="c-email fi" href="mailto:your@email.com">your@email.com</a>
+    <div class="socials fi">
+      <a class="sl" href="https://github.com/" target="_blank">GitHub</a>
+      <a class="sl" href="https://linkedin.com/" target="_blank">LinkedIn</a>
+      <a class="sl" href="#">Resume PDF</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Simone Trevisan — Game Programmer</p>
+    <p>© 2026 — Built from scratch</p>
+  </footer>
+
+  <div id="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">✕</button>
+      <div class="slider-wrap">
+        <div class="slides" id="slides"></div>
+        <button class="sl-btn sl-prev" id="sl-prev">←</button>
+        <button class="sl-btn sl-next" id="sl-next">→</button>
+        <div class="sl-dots" id="sl-dots"></div>
+        <div class="sl-counter" id="sl-counter"></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-tags" id="modal-tags"></div>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-year" id="modal-year"></div>
+        <div class="modal-desc" id="modal-desc"></div>
+        <div class="modal-links" id="modal-links"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-/* ══ ARCHITECTURE DIAGRAM SVGs ══ */
-var DIAG = {
-  overdrill: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="DM Mono, monospace" font-size="11">
+  <script>
+    /* ══ ARCHITECTURE DIAGRAM SVGs ══ */
+    var DIAG = {
+      overdrill: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="DM Mono, monospace" font-size="11">
     <rect width="640" height="340" fill="#080808"/>
     <text x="320" y="28" text-anchor="middle" fill="rgba(232,255,90,.35)" font-size="9" letter-spacing="3">ARCHITECTURE — OVERDRILL</text>
     <!-- GameMode -->
@@ -497,7 +1597,7 @@ var DIAG = {
     <text x="20" y="320" fill="rgba(232,255,90,.25)" font-size="8" letter-spacing="1">UE5 · C++ · BLUEPRINT EXPOSED</text>
   </svg>`,
 
-  coaching: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="DM Mono, monospace" font-size="11">
+      coaching: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="DM Mono, monospace" font-size="11">
     <rect width="640" height="340" fill="#080808"/>
     <text x="320" y="28" text-anchor="middle" fill="rgba(232,255,90,.35)" font-size="9" letter-spacing="3">FSM ARCHITECTURE — COACHING TOOL</text>
     <!-- States row -->
@@ -543,7 +1643,7 @@ var DIAG = {
     <text x="20" y="325" fill="rgba(232,255,90,.25)" font-size="8" letter-spacing="1">UE5 · C++ · UMG · DYNAMIC MATERIAL INSTANCES</text>
   </svg>`,
 
-  playstation: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="DM Mono, monospace" font-size="11">
+      playstation: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="DM Mono, monospace" font-size="11">
     <rect width="640" height="340" fill="#080808"/>
     <text x="320" y="28" text-anchor="middle" fill="rgba(232,255,90,.35)" font-size="9" letter-spacing="3">BUILD PIPELINE — PLAYSTATION SDK</text>
     <!-- Pipeline boxes top-to-bottom -->
@@ -584,7 +1684,7 @@ var DIAG = {
     <text x="20" y="325" fill="rgba(232,255,90,.25)" font-size="8" letter-spacing="1">UE5 · C++ · PS SDK · LINUX BUILD PIPELINE</text>
   </svg>`,
 
-  soccer: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="DM Mono, monospace" font-size="11">
+      soccer: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="DM Mono, monospace" font-size="11">
     <rect width="640" height="340" fill="#080808"/>
     <text x="320" y="28" text-anchor="middle" fill="rgba(232,255,90,.35)" font-size="9" letter-spacing="3">AI SYSTEM — SOCCER 2v2 / 3v3</text>
     <!-- AIAgent top -->
@@ -627,643 +1727,644 @@ var DIAG = {
     <text x="320" y="295" text-anchor="middle" fill="rgba(232,255,90,.35)" font-size="9">Per-agent role arbitration · Formation management</text>
     <text x="20" y="325" fill="rgba(232,255,90,.25)" font-size="8" letter-spacing="1">UNITY · C# · FSM · STEERING BEHAVIORS · GAME AI</text>
   </svg>`
-};
+    };
 
-/* ══ PROJECTS DATA ══ */
-const PROJECTS = [
-  {
-    title: 'Overdrill',
-    year: '2025 — Unreal Engine 5 · C++',
-    tags: ['C++', 'UE5', 'Twin-Stick Shooter', 'Tower Defense', 'Master Project'],
-    desc: 'A twin-stick shooter / tower defense hybrid developed in Unreal Engine 5 as the capstone project for the Master in Computer Game Development at Università di Verona. Combines real-time shooting mechanics with strategic tower placement. Modular C++ architecture with Blueprint-exposed interfaces — GameMode orchestrates a WaveManager (enemy FSM spawning), a TowerSubsystem (placement + shooting), and a custom ShooterPlayerController.',
-    links: [{ label: 'GitHub ↗', url: '#' }],
-    slides: [
-      { type: 'diagram', svg: DIAG.overdrill, label: 'Architecture' },
-      { label: 'Twin-Stick Shooter', color: '#1a0a00' },
-      { label: 'Tower Defense', color: '#0b0a1a' }
-    ]
-  },
-  {
-    title: 'Coaching Tool',
-    year: '2024 — Unreal Engine 5 · C++',
-    tags: ['C++', 'UE5', 'FSM', 'UMG', 'Blueprint', 'DynMaterial'],
-    desc: 'An in-editor UE5 tool built for a coaching project. A Finite State Machine (IDLE → TOOLBAR_ACTIVE → ACTOR_SELECTED → EXEC) drives a toolbar system for actor manipulation in-scene. C++ base classes expose clean Blueprint-friendly UPROPERTY interfaces via the Template Method Pattern, while UMG widgets reflect live state changes. Dynamic Material Instances handle real-time color/parameter overrides.',
-    links: [{ label: 'GitHub ↗', url: '#' }, { label: 'Video ↗', url: '#' }],
-    slides: [
-      { type: 'diagram', svg: DIAG.coaching, label: 'FSM Diagram' },
-      { label: 'Toolbar UI', color: '#090e1a' },
-      { label: 'Actor Manipulation', color: '#130a1a' },
-      { label: 'Material Instances', color: '#1a0e0a' }
-    ]
-  },
-  {
-    title: 'PlayStation SDK Integration',
-    year: '2023 — Unreal Engine 5 · PlayStation',
-    tags: ['C++', 'PS SDK', 'Console', '.self', 'UE5', 'Build Pipeline'],
-    desc: 'Deep platform integration for PlayStation consoles inside a live UE5 project. Covers .self binary packaging, save-data management, controller input layer, trophies/achievements and full platform-compliance. Build pipeline runs Linux ↔ Windows via SSH tunnelling — source on Windows, compile on Linux, output .self to console. One of the more unusual and technically demanding areas of UE5 console work.',
-    links: [{ label: 'Details ↗', url: '#' }],
-    slides: [
-      { type: 'diagram', svg: DIAG.playstation, label: 'Build Pipeline' },
-      { label: 'Save System', color: '#00180d' },
-      { label: 'Input Layer', color: '#16001a' }
-    ]
-  },
-  {
-    title: 'Soccer AI System',
-    year: '2024 — Unity · C#',
-    tags: ['C#', 'Unity', 'FSM', 'Steering Behaviors', 'Game AI', 'Team Coordination'],
-    desc: 'A complete AI system for a 2v2/3v3 soccer game in Unity. FSM-driven agents with separate defensive (goalkeeper positioning, interpose, ball protection) and offensive (corner plays, standard attack) states. Steering behaviours (seek/flee/separation) govern low-level locomotion. A shared Decision Layer handles shot vs pass intelligence, dynamic role assignment, and real-time team coordination via a blackboard.',
-    links: [{ label: 'GitHub ↗', url: '#' }],
-    slides: [
-      { type: 'diagram', svg: DIAG.soccer, label: 'AI Architecture' },
-      { label: 'Steering Behaviors', color: '#0a0014' },
-      { label: 'Team Tactics', color: '#1a0800' }
-    ]
-  },
-  {
-    title: 'Unreal Platform Game',
-    year: '2024 — Unreal Engine 5 · C++',
-    tags: ['C++', 'UE5', 'AI NavMesh', 'FSM', 'Animations', 'Resource Systems'],
-    desc: 'A complete 3D platformer in UE5 featuring custom movement, AI enemies via NavMesh, boss fights with a dedicated FSM, resource management, power-ups, and unlockable areas. Challenge: defeat all enemies while collecting maximum resources in the shortest time. Built entirely in C++ with Blueprint integration for designer workflows.',
-    links: [{ label: 'GitHub ↗', url: '#' }, { label: 'itch.io ↗', url: '#' }],
-    slides: [
-      { label: 'Custom Movement', color: '#0a120f' },
-      { label: 'AI NavMesh', color: '#12080a' },
-      { label: 'Boss Fight FSM', color: '#0e0a1a' },
-      { label: 'Resource System', color: '#1a1000' }
-    ]
-  },
-  {
-    title: 'BB8 Physics Simulation',
-    year: '2024 — Unreal Engine 5 · C++',
-    tags: ['C++', 'UE5', 'Physics 3D', 'Applied Forces', 'Character Movement'],
-    desc: "A physics-based character controller simulating the BB8 droid's locomotion in UE5. Spherical rolling driven by applied angular forces, gyroscopic head stabilisation maintaining vertical orientation, and a fully custom movement component for realistic sphere-on-ground contact. All physics via applied forces — zero kinematic overrides.",
-    links: [{ label: 'GitHub ↗', url: '#' }],
-    slides: [
-      { label: 'Sphere Rolling', color: '#0d0a1a' },
-      { label: 'Gyroscopic Head', color: '#0a1512' },
-      { label: 'Custom Movement', color: '#1a0e00' }
-    ]
-  },
-  {
-    title: 'Physics-Based Networking',
-    year: '2024 — Unity · C#',
-    tags: ['C#', 'Unity', 'Photon PUN', 'Physics Simulation', 'Networking'],
-    desc: 'Multiplayer physics simulation in Unity using Photon PUN, following Gaffer on Games networking principles. Implements client-side prediction, server reconciliation, snapshot interpolation, and lag compensation — guaranteeing accurate synchronisation of physics entities across all clients even under significant latency.',
-    links: [{ label: 'GitHub ↗', url: '#' }],
-    slides: [
-      { label: 'Client Prediction', color: '#001530' },
-      { label: 'Reconciliation', color: '#001a15' },
-      { label: 'Interpolation', color: '#1a1500' }
-    ]
-  },
-  {
-    title: 'Memory Manager',
-    year: '2023 — C++',
-    tags: ['C++', 'Memory Management', 'Operator Overloading', 'Performance'],
-    desc: "Custom memory manager implementing Alexandrescu's Small Object Allocator pattern with global override of new/delete. Reduces allocation overhead for small, frequent objects using fixed-size pool chunks. Designed for performance-critical runtime contexts — game engines, real-time systems.",
-    links: [{ label: 'GitHub ↗', url: '#' }],
-    slides: [
-      { label: 'Pool Allocator', color: '#0a0a0a' },
-      { label: 'new/delete Override', color: '#0f0a14' },
-      { label: 'Benchmark', color: '#141000' }
-    ]
-  },
-  {
-    title: 'FMod Wrapper Library',
-    year: '2023 — C++',
-    tags: ['C++', 'FMOD API', 'Audio Programming', 'Resource Management'],
-    desc: 'A C++ wrapper library around the FMOD API providing a clean, high-level interface for multi-channel audio playback and runtime control. Abstracts FMOD initialisation, channel management, and resource lifetime — exposing a simplified API suitable for game engine pipeline integration.',
-    links: [{ label: 'GitHub ↗', url: '#' }],
-    slides: [
-      { label: 'FMOD Abstraction', color: '#00100d' },
-      { label: 'Multi-Channel Audio', color: '#10000d' },
-      { label: 'Resource Lifetime', color: '#0d1000' }
-    ]
-  }
-];
-
-/* ══ HERO MAZE + A* ══ */
-(function () {
-  var canvas = document.getElementById('hero-canvas');
-  var ctx = canvas.getContext('2d');
-  var heroEl = document.getElementById('hero');
-  var hint = document.getElementById('hero-hint');
-
-  var CELL = 38;
-  var W, H, COLS, ROWS, offX, offY;
-  var cells;
-  var N = 0, E = 1, S = 2, W3 = 3;
-  var OPP = [2, 3, 0, 1], DDC = [0, 1, 0, -1], DDR = [-1, 0, 1, 0];
-
-  var C = {
-    wall: 'rgba(232,255,90,',
-    wallUncarved: 0.40,
-    wallCarved: 0.28,
-    wallActive: 0.65,
-    blockFill: 'rgba(121, 113, 19, 0.15)',
-    openFill: 'rgba(160,195,230,0.12)',
-    exploredR: 28, exploredG: 34, exploredB: 44,
-    pathFill: 'rgba(232,255,90,',
-    pathLine: 'rgba(232,255,90,',
-    pathGlowAlpha: 0.08,
-    pathGlowDelta: 0.06,
-    pathLineAlpha: 0.55,
-    pathLineDelta: 0.30,
-    pathHead: 'rgba(255,255,200,0.95)',
-    pathHeadGlow: 'rgba(232,255,90,0.7)',
-    dotStart: 'rgba(60, 103, 210, 0.85)',
-    dotGoal: 'rgba(105, 255, 40, 0.85)',
-    dotStartPick: 'rgba(60, 103, 210, 0.25)',
-  };
-
-  var mode = 'auto';
-  var autoPhase = 'generate';
-  var autoTimer = 0;
-  var userPhase = 'pick_start';
-  var userDoneTimer = 0;
-  var USER_DONE_PAUSE = 3500;
-
-  var primFrontier = [];
-  var primVisited = null;
-  var GEN_SPEED = 2;
-  var SOLVE_SPEED = 6;
-  var PAUSE_SHORT = 1000;
-  var PAUSE_LONG = 4000;
-
-  var aOpen, aClosed, aCameFrom, gScore, fScore;
-  var aRunning = false;
-  var solvePath = null, showPathIdx = 0;
-  var pathGlow = 0, pathDrawTick = 0;
-
-  var startIdx = -1, goalIdx = -1;
-  var userStart = -1, userGoal = -1;
-
-  function ci(c, r) { return r * COLS + c; }
-
-  function resize() {
-    W = heroEl.offsetWidth || window.innerWidth;
-    H = heroEl.offsetHeight || window.innerHeight;
-    if (!W || !H || W < 100) return;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    enterAuto();
-  }
-
-  function initCells() {
-    COLS = Math.floor(W / CELL);
-    ROWS = Math.floor(H / CELL);
-    offX = Math.floor((W - COLS * CELL) / 2);
-    offY = Math.floor((H - ROWS * CELL) / 2);
-    cells = [];
-    for (var i = 0; i < COLS * ROWS; i++)
-      cells.push({ walls: [true, true, true, true], explored: false, inOpen: false, inPath: false });
-  }
-
-  function enterAuto() {
-    mode = 'auto';
-    initCells();
-    primVisited = new Uint8Array(COLS * ROWS);
-    primFrontier = [];
-    solvePath = null; aRunning = false; pathGlow = 0; pathDrawTick = 0;
-    startIdx = -1; goalIdx = -1;
-    userStart = -1; userGoal = -1;
-    userPhase = 'pick_start';
-    autoPhase = 'generate';
-    if (hint) { hint.textContent = 'Click to set start · click again to solve'; hint.classList.remove('hide'); }
-    var sc = Math.floor(COLS / 2), sr = Math.floor(ROWS / 2);
-    primVisit(sc, sr);
-  }
-
-  function primVisit(c, r) {
-    primVisited[ci(c, r)] = 1;
-    for (var d = 0; d < 4; d++) {
-      var nc = c + DDC[d], nr = r + DDR[d];
-      if (nc >= 0 && nc < COLS && nr >= 0 && nr < ROWS && !primVisited[ci(nc, nr)]) {
-        primVisited[ci(nc, nr)] = 2;
-        primFrontier.push({ c: nc, r: nr });
+    /* ══ PROJECTS DATA ══ */
+    const PROJECTS = [
+      {
+        title: 'Overdrill',
+        year: '2025 — Unreal Engine 5 · C++',
+        tags: ['C++', 'UE5', 'Twin-Stick Shooter', 'Tower Defense', 'Master Project'],
+        desc: 'A twin-stick shooter / tower defense hybrid developed in Unreal Engine 5 as the capstone project for the Master in Computer Game Development at Università di Verona. Combines real-time shooting mechanics with strategic tower placement. Modular C++ architecture with Blueprint-exposed interfaces — GameMode orchestrates a WaveManager (enemy FSM spawning), a TowerSubsystem (placement + shooting), and a custom ShooterPlayerController.',
+        links: [{ label: 'GitHub ↗', url: '#' }],
+        slides: [
+          { type: 'diagram', svg: DIAG.overdrill, label: 'Architecture' },
+          { label: 'Twin-Stick Shooter', color: '#1a0a00' },
+          { label: 'Tower Defense', color: '#0b0a1a' }
+        ]
+      },
+      {
+        title: 'Coaching Tool',
+        year: '2024 — Unreal Engine 5 · C++',
+        tags: ['C++', 'UE5', 'FSM', 'UMG', 'Blueprint', 'DynMaterial'],
+        desc: 'An in-editor UE5 tool built for a coaching project. A Finite State Machine (IDLE → TOOLBAR_ACTIVE → ACTOR_SELECTED → EXEC) drives a toolbar system for actor manipulation in-scene. C++ base classes expose clean Blueprint-friendly UPROPERTY interfaces via the Template Method Pattern, while UMG widgets reflect live state changes. Dynamic Material Instances handle real-time color/parameter overrides.',
+        links: [{ label: 'GitHub ↗', url: '#' }, { label: 'Video ↗', url: '#' }],
+        slides: [
+          { type: 'diagram', svg: DIAG.coaching, label: 'FSM Diagram' },
+          { label: 'Toolbar UI', color: '#090e1a' },
+          { label: 'Actor Manipulation', color: '#130a1a' },
+          { label: 'Material Instances', color: '#1a0e0a' }
+        ]
+      },
+      {
+        title: 'PlayStation SDK Integration',
+        year: '2023 — Unreal Engine 5 · PlayStation',
+        tags: ['C++', 'PS SDK', 'Console', '.self', 'UE5', 'Build Pipeline'],
+        desc: 'Deep platform integration for PlayStation consoles inside a live UE5 project. Covers .self binary packaging, save-data management, controller input layer, trophies/achievements and full platform-compliance. Build pipeline runs Linux ↔ Windows via SSH tunnelling — source on Windows, compile on Linux, output .self to console. One of the more unusual and technically demanding areas of UE5 console work.',
+        links: [{ label: 'Details ↗', url: '#' }],
+        slides: [
+          { type: 'diagram', svg: DIAG.playstation, label: 'Build Pipeline' },
+          { label: 'Save System', color: '#00180d' },
+          { label: 'Input Layer', color: '#16001a' }
+        ]
+      },
+      {
+        title: 'Soccer AI System',
+        year: '2024 — Unity · C#',
+        tags: ['C#', 'Unity', 'FSM', 'Steering Behaviors', 'Game AI', 'Team Coordination'],
+        desc: 'A complete AI system for a 2v2/3v3 soccer game in Unity. FSM-driven agents with separate defensive (goalkeeper positioning, interpose, ball protection) and offensive (corner plays, standard attack) states. Steering behaviours (seek/flee/separation) govern low-level locomotion. A shared Decision Layer handles shot vs pass intelligence, dynamic role assignment, and real-time team coordination via a blackboard.',
+        links: [{ label: 'GitHub ↗', url: '#' }],
+        slides: [
+          { type: 'diagram', svg: DIAG.soccer, label: 'AI Architecture' },
+          { label: 'Steering Behaviors', color: '#0a0014' },
+          { label: 'Team Tactics', color: '#1a0800' }
+        ]
+      },
+      {
+        title: 'Unreal Platform Game',
+        year: '2024 — Unreal Engine 5 · C++',
+        tags: ['C++', 'UE5', 'AI NavMesh', 'FSM', 'Animations', 'Resource Systems'],
+        desc: 'A complete 3D platformer in UE5 featuring custom movement, AI enemies via NavMesh, boss fights with a dedicated FSM, resource management, power-ups, and unlockable areas. Challenge: defeat all enemies while collecting maximum resources in the shortest time. Built entirely in C++ with Blueprint integration for designer workflows.',
+        links: [{ label: 'GitHub ↗', url: '#' }, { label: 'itch.io ↗', url: '#' }],
+        slides: [
+          { label: 'Custom Movement', color: '#0a120f' },
+          { label: 'AI NavMesh', color: '#12080a' },
+          { label: 'Boss Fight FSM', color: '#0e0a1a' },
+          { label: 'Resource System', color: '#1a1000' }
+        ]
+      },
+      {
+        title: 'BB8 Physics Simulation',
+        year: '2024 — Unreal Engine 5 · C++',
+        tags: ['C++', 'UE5', 'Physics 3D', 'Applied Forces', 'Character Movement'],
+        desc: "A physics-based character controller simulating the BB8 droid's locomotion in UE5. Spherical rolling driven by applied angular forces, gyroscopic head stabilisation maintaining vertical orientation, and a fully custom movement component for realistic sphere-on-ground contact. All physics via applied forces — zero kinematic overrides.",
+        links: [{ label: 'GitHub ↗', url: '#' }],
+        slides: [
+          { label: 'Sphere Rolling', color: '#0d0a1a' },
+          { label: 'Gyroscopic Head', color: '#0a1512' },
+          { label: 'Custom Movement', color: '#1a0e00' }
+        ]
+      },
+      {
+        title: 'Physics-Based Networking',
+        year: '2024 — Unity · C#',
+        tags: ['C#', 'Unity', 'Photon PUN', 'Physics Simulation', 'Networking'],
+        desc: 'Multiplayer physics simulation in Unity using Photon PUN, following Gaffer on Games networking principles. Implements client-side prediction, server reconciliation, snapshot interpolation, and lag compensation — guaranteeing accurate synchronisation of physics entities across all clients even under significant latency.',
+        links: [{ label: 'GitHub ↗', url: '#' }],
+        slides: [
+          { label: 'Client Prediction', color: '#001530' },
+          { label: 'Reconciliation', color: '#001a15' },
+          { label: 'Interpolation', color: '#1a1500' }
+        ]
+      },
+      {
+        title: 'Memory Manager',
+        year: '2023 — C++',
+        tags: ['C++', 'Memory Management', 'Operator Overloading', 'Performance'],
+        desc: "Custom memory manager implementing Alexandrescu's Small Object Allocator pattern with global override of new/delete. Reduces allocation overhead for small, frequent objects using fixed-size pool chunks. Designed for performance-critical runtime contexts — game engines, real-time systems.",
+        links: [{ label: 'GitHub ↗', url: '#' }],
+        slides: [
+          { label: 'Pool Allocator', color: '#0a0a0a' },
+          { label: 'new/delete Override', color: '#0f0a14' },
+          { label: 'Benchmark', color: '#141000' }
+        ]
+      },
+      {
+        title: 'FMod Wrapper Library',
+        year: '2023 — C++',
+        tags: ['C++', 'FMOD API', 'Audio Programming', 'Resource Management'],
+        desc: 'A C++ wrapper library around the FMOD API providing a clean, high-level interface for multi-channel audio playback and runtime control. Abstracts FMOD initialisation, channel management, and resource lifetime — exposing a simplified API suitable for game engine pipeline integration.',
+        links: [{ label: 'GitHub ↗', url: '#' }],
+        slides: [
+          { label: 'FMOD Abstraction', color: '#00100d' },
+          { label: 'Multi-Channel Audio', color: '#10000d' },
+          { label: 'Resource Lifetime', color: '#0d1000' }
+        ]
       }
-    }
-  }
+    ];
 
-  function stepGenerate() {
-    for (var s = 0; s < GEN_SPEED; s++) {
-      if (!primFrontier.length) return false;
-      var fi = Math.floor(Math.random() * primFrontier.length);
-      var cur = primFrontier.splice(fi, 1)[0];
-      if (primVisited[ci(cur.c, cur.r)] === 1) continue;
-      var dirs = [0, 1, 2, 3].sort(function () { return Math.random() - .5; });
-      for (var di = 0; di < 4; di++) {
-        var d = dirs[di];
-        var nc = cur.c + DDC[d], nr = cur.r + DDR[d];
-        if (nc >= 0 && nc < COLS && nr >= 0 && nr < ROWS && primVisited[ci(nc, nr)] === 1) {
-          cells[ci(cur.c, cur.r)].walls[d] = false;
-          cells[ci(nc, nr)].walls[OPP[d]] = false;
-          primVisit(cur.c, cur.r);
-          break;
-        }
+    /* ══ HERO MAZE + A* ══ */
+    (function () {
+      var canvas = document.getElementById('hero-canvas');
+      var ctx = canvas.getContext('2d');
+      var heroEl = document.getElementById('hero');
+      var hint = document.getElementById('hero-hint');
+
+      var CELL = 38;
+      var W, H, COLS, ROWS, offX, offY;
+      var cells;
+      var N = 0, E = 1, S = 2, W3 = 3;
+      var OPP = [2, 3, 0, 1], DDC = [0, 1, 0, -1], DDR = [-1, 0, 1, 0];
+
+      var C = {
+        wall: 'rgba(232,255,90,',
+        wallUncarved: 0.40,
+        wallCarved: 0.28,
+        wallActive: 0.65,
+        blockFill: 'rgba(121, 113, 19, 0.15)',
+        openFill: 'rgba(160,195,230,0.12)',
+        exploredR: 28, exploredG: 34, exploredB: 44,
+        pathFill: 'rgba(232,255,90,',
+        pathLine: 'rgba(232,255,90,',
+        pathGlowAlpha: 0.08,
+        pathGlowDelta: 0.06,
+        pathLineAlpha: 0.55,
+        pathLineDelta: 0.30,
+        pathHead: 'rgba(255,255,200,0.95)',
+        pathHeadGlow: 'rgba(232,255,90,0.7)',
+        dotStart: 'rgba(60, 103, 210, 0.85)',
+        dotGoal: 'rgba(105, 255, 40, 0.85)',
+        dotStartPick: 'rgba(60, 103, 210, 0.25)',
+      };
+
+      var mode = 'auto';
+      var autoPhase = 'generate';
+      var autoTimer = 0;
+      var userPhase = 'pick_start';
+      var userDoneTimer = 0;
+      var USER_DONE_PAUSE = 3500;
+
+      var primFrontier = [];
+      var primVisited = null;
+      var GEN_SPEED = 2;
+      var SOLVE_SPEED = 6;
+      var PAUSE_SHORT = 1000;
+      var PAUSE_LONG = 4000;
+
+      var aOpen, aClosed, aCameFrom, gScore, fScore;
+      var aRunning = false;
+      var solvePath = null, showPathIdx = 0;
+      var pathGlow = 0, pathDrawTick = 0;
+
+      var startIdx = -1, goalIdx = -1;
+      var userStart = -1, userGoal = -1;
+
+      function ci(c, r) { return r * COLS + c; }
+
+      function resize() {
+        W = heroEl.offsetWidth || window.innerWidth;
+        H = heroEl.offsetHeight || window.innerHeight;
+        if (!W || !H || W < 100) return;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        enterAuto();
       }
-    }
-    return primFrontier.length > 0;
-  }
 
-  function autoStartSolve() {
-    var corners = [0, COLS - 1, ci(0, ROWS - 1), ci(COLS - 1, ROWS - 1)];
-    var si = Math.floor(Math.random() * 2);
-    startIdx = corners[si];
-    goalIdx = corners[3 - si];
-    beginAStar(startIdx, goalIdx);
-    autoPhase = 'solve';
-  }
-
-  function beginAStar(si, gi) {
-    startIdx = si; goalIdx = gi;
-    aRunning = true; solvePath = null; showPathIdx = 0; pathDrawTick = 0;
-    var n = COLS * ROWS;
-    aClosed = new Uint8Array(n);
-    aCameFrom = new Int32Array(n).fill(-1);
-    gScore = new Float32Array(n).fill(Infinity);
-    fScore = new Float32Array(n).fill(Infinity);
-    for (var i = 0; i < cells.length; i++) {
-      cells[i].explored = false; cells[i].inOpen = false; cells[i].inPath = false;
-    }
-    gScore[startIdx] = 0;
-    fScore[startIdx] = heur(startIdx);
-    aOpen = [startIdx];
-    cells[startIdx].inOpen = true;
-  }
-
-  function heur(idx) {
-    var ac = idx % COLS, ar = Math.floor(idx / COLS);
-    var bc = goalIdx % COLS, br = Math.floor(goalIdx / COLS);
-    return Math.abs(ac - bc) + Math.abs(ar - br);
-  }
-
-  function stepSolve() {
-    for (var s = 0; s < SOLVE_SPEED; s++) {
-      if (!aRunning) return;
-      if (!aOpen.length) { aRunning = false; return; }
-      var bi = 0;
-      for (var k = 1; k < aOpen.length; k++)
-        if (fScore[aOpen[k]] < fScore[aOpen[bi]]) bi = k;
-      var cur = aOpen.splice(bi, 1)[0];
-      cells[cur].inOpen = false; cells[cur].explored = true; aClosed[cur] = 1;
-      if (cur === goalIdx) {
-        solvePath = []; var node = goalIdx;
-        while (node !== -1) { solvePath.unshift(node); node = aCameFrom[node]; }
-        aRunning = false; return;
+      function initCells() {
+        COLS = Math.floor(W / CELL);
+        ROWS = Math.floor(H / CELL);
+        offX = Math.floor((W - COLS * CELL) / 2);
+        offY = Math.floor((H - ROWS * CELL) / 2);
+        cells = [];
+        for (var i = 0; i < COLS * ROWS; i++)
+          cells.push({ walls: [true, true, true, true], explored: false, inOpen: false, inPath: false });
       }
-      var cc = cur % COLS, cr = Math.floor(cur / COLS);
-      for (var d = 0; d < 4; d++) {
-        if (cells[cur].walls[d]) continue;
-        var nc = cc + DDC[d], nr = cr + DDR[d];
-        if (nc < 0 || nc >= COLS || nr < 0 || nr >= ROWS) continue;
-        var nb = ci(nc, nr);
-        if (aClosed[nb]) continue;
-        var tg = gScore[cur] + 1;
-        if (tg < gScore[nb]) {
-          aCameFrom[nb] = cur; gScore[nb] = tg; fScore[nb] = tg + heur(nb);
-          if (aOpen.indexOf(nb) === -1) { aOpen.push(nb); cells[nb].inOpen = true; }
-        }
+
+      function enterAuto() {
+        mode = 'auto';
+        initCells();
+        primVisited = new Uint8Array(COLS * ROWS);
+        primFrontier = [];
+        solvePath = null; aRunning = false; pathGlow = 0; pathDrawTick = 0;
+        startIdx = -1; goalIdx = -1;
+        userStart = -1; userGoal = -1;
+        userPhase = 'pick_start';
+        autoPhase = 'generate';
+        if (hint) { hint.textContent = 'Click to set start · click again to solve'; hint.classList.remove('hide'); }
+        var sc = Math.floor(COLS / 2), sr = Math.floor(ROWS / 2);
+        primVisit(sc, sr);
       }
-    }
-  }
 
-  function render() {
-    ctx.clearRect(0, 0, W, H);
-    pathGlow += 0.05;
-
-    var maxG = 1;
-    if (gScore) for (var i = 0; i < gScore.length; i++)
-      if (gScore[i] < Infinity && gScore[i] > maxG) maxG = gScore[i];
-
-    for (var r = 0; r < ROWS; r++) {
-      for (var c = 0; c < COLS; c++) {
-        var idx = ci(c, r), cell = cells[idx];
-        var px = offX + c * CELL, py = offY + r * CELL;
-        var inner = CELL - 2;
-        var uncarved = cell.walls[N] && cell.walls[E] && cell.walls[S] && cell.walls[W3];
-        if (uncarved) {
-          ctx.fillStyle = C.blockFill;
-          ctx.fillRect(px + 1, py + 1, inner, inner);
-        } else if (cell.inPath) {
-          var gp = Math.sin(pathGlow) * .5 + .5;
-          ctx.fillStyle = C.pathFill + (.05 + gp * .04) + ')';
-          ctx.fillRect(px + 1, py + 1, inner, inner);
-          ctx.strokeStyle = C.pathFill + (.45 + gp * .30) + ')';
-          ctx.lineWidth = .8;
-          ctx.strokeRect(px + 2, py + 2, inner - 2, inner - 2);
-        } else if (cell.explored && gScore) {
-          var gn = gScore[idx] < Infinity ? Math.min(1, gScore[idx] / maxG) : 0;
-          ctx.fillStyle = 'rgba(' + (C.exploredR + gn * 8) + ',' + (C.exploredG + gn * 10) + ',' + (C.exploredB + gn * 12) + ',' + (.65 - gn * .15) + ')';
-          ctx.fillRect(px + 1, py + 1, inner, inner);
-        } else if (cell.inOpen && gScore) {
-          ctx.fillStyle = C.openFill;
-          ctx.fillRect(px + 1, py + 1, inner, inner);
-        }
-        if (mode === 'user' && userPhase === 'pick_goal' && idx === userStart) {
-          ctx.fillStyle = C.dotStartPick;
-          ctx.fillRect(px + 1, py + 1, inner, inner);
-        }
-        var wa = uncarved ? C.wallUncarved : (cell.inPath || cell.explored || cell.inOpen) ? C.wallActive : C.wallCarved;
-        ctx.strokeStyle = C.wall + wa + ')';
-        ctx.lineWidth = 1; ctx.lineCap = 'square';
-        if (cell.walls[N]) { ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + CELL, py); ctx.stroke(); }
-        if (cell.walls[E]) { ctx.beginPath(); ctx.moveTo(px + CELL, py); ctx.lineTo(px + CELL, py + CELL); ctx.stroke(); }
-        if (cell.walls[S]) { ctx.beginPath(); ctx.moveTo(px, py + CELL); ctx.lineTo(px + CELL, py + CELL); ctx.stroke(); }
-        if (cell.walls[W3]) { ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py + CELL); ctx.stroke(); }
-      }
-    }
-
-    if (startIdx >= 0) drawDot(startIdx, C.dotStart);
-    if (goalIdx >= 0) drawDot(goalIdx, C.dotGoal);
-
-    if (solvePath && showPathIdx > 1) {
-      var gv = Math.sin(pathGlow) * .5 + .5;
-      ctx.beginPath();
-      for (var p = 0; p < showPathIdx && p < solvePath.length; p++) {
-        var pc = solvePath[p] % COLS, pr = Math.floor(solvePath[p] / COLS);
-        var ppx = offX + pc * CELL + CELL / 2, ppy = offY + pr * CELL + CELL / 2;
-        p === 0 ? ctx.moveTo(ppx, ppy) : ctx.lineTo(ppx, ppy);
-      }
-      ctx.strokeStyle = C.pathLine + (C.pathGlowAlpha + gv * C.pathGlowDelta) + ')';
-      ctx.lineWidth = 10; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke();
-      ctx.beginPath();
-      for (var p2 = 0; p2 < showPathIdx && p2 < solvePath.length; p2++) {
-        var pc2 = solvePath[p2] % COLS, pr2 = Math.floor(solvePath[p2] / COLS);
-        var ppx2 = offX + pc2 * CELL + CELL / 2, ppy2 = offY + pr2 * CELL + CELL / 2;
-        p2 === 0 ? ctx.moveTo(ppx2, ppy2) : ctx.lineTo(ppx2, ppy2);
-      }
-      ctx.strokeStyle = C.pathLine + (C.pathLineAlpha + gv * C.pathLineDelta) + ')';
-      ctx.lineWidth = 1.8; ctx.stroke();
-      if (showPathIdx > 0) {
-        var hi = solvePath[Math.min(showPathIdx - 1, solvePath.length - 1)];
-        var hpc = hi % COLS, hpr = Math.floor(hi / COLS);
-        ctx.shadowColor = C.pathHeadGlow; ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.arc(offX + hpc * CELL + CELL / 2, offY + hpr * CELL + CELL / 2, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = C.pathHead; ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-    }
-  }
-
-  function drawDot(idx, color) {
-    if (idx < 0) return;
-    var c = idx % COLS, r = Math.floor(idx / COLS);
-    ctx.shadowColor = color; ctx.shadowBlur = 10;
-    ctx.beginPath();
-    ctx.arc(offX + c * CELL + CELL / 2, offY + r * CELL + CELL / 2, 4, 0, Math.PI * 2);
-    ctx.fillStyle = color; ctx.fill();
-    ctx.shadowBlur = 0;
-  }
-
-  function draw(ts) {
-    requestAnimationFrame(draw);
-    if (mode === 'user') {
-      if (userPhase === 'solving') {
-        if (aRunning) {
-          stepSolve();
-        } else {
-          if (solvePath) {
-            pathDrawTick++;
-            if (pathDrawTick % 2 === 0 && showPathIdx < solvePath.length) {
-              cells[solvePath[showPathIdx]].inPath = true;
-              showPathIdx++;
-            }
-            if (showPathIdx >= solvePath.length) {
-              userPhase = 'done';
-              userDoneTimer = ts;
-              if (hint) { hint.textContent = 'Click anywhere to search again'; hint.classList.remove('hide'); }
-            }
-          } else {
-            userPhase = 'done'; userDoneTimer = ts;
+      function primVisit(c, r) {
+        primVisited[ci(c, r)] = 1;
+        for (var d = 0; d < 4; d++) {
+          var nc = c + DDC[d], nr = r + DDR[d];
+          if (nc >= 0 && nc < COLS && nr >= 0 && nr < ROWS && !primVisited[ci(nc, nr)]) {
+            primVisited[ci(nc, nr)] = 2;
+            primFrontier.push({ c: nc, r: nr });
           }
         }
-      } else if (userPhase === 'done') {
-        if (ts - userDoneTimer > USER_DONE_PAUSE) enterAuto();
       }
-      render();
-      return;
-    }
-    if (autoPhase === 'generate') {
-      if (!stepGenerate()) { autoPhase = 'pause_pre_solve'; autoTimer = ts; }
-    } else if (autoPhase === 'pause_pre_solve') {
-      if (ts - autoTimer > PAUSE_SHORT) autoStartSolve();
-    } else if (autoPhase === 'solve') {
-      stepSolve();
-      if (!aRunning && solvePath) { autoPhase = 'showpath'; }
-      else if (!aRunning && !solvePath) { autoPhase = 'pause_pre_regen'; autoTimer = ts; }
-    } else if (autoPhase === 'showpath') {
-      pathDrawTick++;
-      if (pathDrawTick % 3 === 0) {
-        if (showPathIdx < solvePath.length) { cells[solvePath[showPathIdx]].inPath = true; showPathIdx++; }
-        else { autoPhase = 'pause_pre_regen'; autoTimer = ts; }
+
+      function stepGenerate() {
+        for (var s = 0; s < GEN_SPEED; s++) {
+          if (!primFrontier.length) return false;
+          var fi = Math.floor(Math.random() * primFrontier.length);
+          var cur = primFrontier.splice(fi, 1)[0];
+          if (primVisited[ci(cur.c, cur.r)] === 1) continue;
+          var dirs = [0, 1, 2, 3].sort(function () { return Math.random() - .5; });
+          for (var di = 0; di < 4; di++) {
+            var d = dirs[di];
+            var nc = cur.c + DDC[d], nr = cur.r + DDR[d];
+            if (nc >= 0 && nc < COLS && nr >= 0 && nr < ROWS && primVisited[ci(nc, nr)] === 1) {
+              cells[ci(cur.c, cur.r)].walls[d] = false;
+              cells[ci(nc, nr)].walls[OPP[d]] = false;
+              primVisit(cur.c, cur.r);
+              break;
+            }
+          }
+        }
+        return primFrontier.length > 0;
       }
-    } else if (autoPhase === 'pause_pre_regen') {
-      if (ts - autoTimer > PAUSE_LONG) enterAuto();
-    }
-    render();
-  }
 
-  canvas.addEventListener('click', function (e) {
-    var rect = canvas.getBoundingClientRect();
-    var lx = e.clientX - rect.left;
-    var ly = e.clientY - rect.top;
-    var cc = Math.floor((lx - offX) / CELL);
-    var cr = Math.floor((ly - offY) / CELL);
-    if (cc < 0 || cc >= COLS || cr < 0 || cr >= ROWS) return;
-    var idx = ci(cc, cr);
-    var cel = cells[idx];
-    if (cel.walls[0] && cel.walls[1] && cel.walls[2] && cel.walls[3]) return;
-    if (mode === 'auto' || (mode === 'user' && (userPhase === 'done' || userPhase === 'pick_start'))) {
-      mode = 'user'; userPhase = 'pick_goal';
-      userStart = idx; userGoal = -1;
-      startIdx = -1; goalIdx = -1;
-      solvePath = null; aRunning = false;
-      for (var i = 0; i < cells.length; i++) {
-        cells[i].explored = false; cells[i].inOpen = false; cells[i].inPath = false;
+      function autoStartSolve() {
+        var corners = [0, COLS - 1, ci(0, ROWS - 1), ci(COLS - 1, ROWS - 1)];
+        var si = Math.floor(Math.random() * 2);
+        startIdx = corners[si];
+        goalIdx = corners[3 - si];
+        beginAStar(startIdx, goalIdx);
+        autoPhase = 'solve';
       }
-      gScore = null;
-      if (hint) { hint.textContent = 'Now click a destination cell'; hint.classList.remove('hide'); }
-    } else if (mode === 'user' && userPhase === 'pick_goal') {
-      if (idx === userStart) return;
-      userGoal = idx;
-      userPhase = 'solving';
-      beginAStar(userStart, userGoal);
-      if (hint) hint.classList.add('hide');
+
+      function beginAStar(si, gi) {
+        startIdx = si; goalIdx = gi;
+        aRunning = true; solvePath = null; showPathIdx = 0; pathDrawTick = 0;
+        var n = COLS * ROWS;
+        aClosed = new Uint8Array(n);
+        aCameFrom = new Int32Array(n).fill(-1);
+        gScore = new Float32Array(n).fill(Infinity);
+        fScore = new Float32Array(n).fill(Infinity);
+        for (var i = 0; i < cells.length; i++) {
+          cells[i].explored = false; cells[i].inOpen = false; cells[i].inPath = false;
+        }
+        gScore[startIdx] = 0;
+        fScore[startIdx] = heur(startIdx);
+        aOpen = [startIdx];
+        cells[startIdx].inOpen = true;
+      }
+
+      function heur(idx) {
+        var ac = idx % COLS, ar = Math.floor(idx / COLS);
+        var bc = goalIdx % COLS, br = Math.floor(goalIdx / COLS);
+        return Math.abs(ac - bc) + Math.abs(ar - br);
+      }
+
+      function stepSolve() {
+        for (var s = 0; s < SOLVE_SPEED; s++) {
+          if (!aRunning) return;
+          if (!aOpen.length) { aRunning = false; return; }
+          var bi = 0;
+          for (var k = 1; k < aOpen.length; k++)
+            if (fScore[aOpen[k]] < fScore[aOpen[bi]]) bi = k;
+          var cur = aOpen.splice(bi, 1)[0];
+          cells[cur].inOpen = false; cells[cur].explored = true; aClosed[cur] = 1;
+          if (cur === goalIdx) {
+            solvePath = []; var node = goalIdx;
+            while (node !== -1) { solvePath.unshift(node); node = aCameFrom[node]; }
+            aRunning = false; return;
+          }
+          var cc = cur % COLS, cr = Math.floor(cur / COLS);
+          for (var d = 0; d < 4; d++) {
+            if (cells[cur].walls[d]) continue;
+            var nc = cc + DDC[d], nr = cr + DDR[d];
+            if (nc < 0 || nc >= COLS || nr < 0 || nr >= ROWS) continue;
+            var nb = ci(nc, nr);
+            if (aClosed[nb]) continue;
+            var tg = gScore[cur] + 1;
+            if (tg < gScore[nb]) {
+              aCameFrom[nb] = cur; gScore[nb] = tg; fScore[nb] = tg + heur(nb);
+              if (aOpen.indexOf(nb) === -1) { aOpen.push(nb); cells[nb].inOpen = true; }
+            }
+          }
+        }
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, W, H);
+        pathGlow += 0.05;
+
+        var maxG = 1;
+        if (gScore) for (var i = 0; i < gScore.length; i++)
+          if (gScore[i] < Infinity && gScore[i] > maxG) maxG = gScore[i];
+
+        for (var r = 0; r < ROWS; r++) {
+          for (var c = 0; c < COLS; c++) {
+            var idx = ci(c, r), cell = cells[idx];
+            var px = offX + c * CELL, py = offY + r * CELL;
+            var inner = CELL - 2;
+            var uncarved = cell.walls[N] && cell.walls[E] && cell.walls[S] && cell.walls[W3];
+            if (uncarved) {
+              ctx.fillStyle = C.blockFill;
+              ctx.fillRect(px + 1, py + 1, inner, inner);
+            } else if (cell.inPath) {
+              var gp = Math.sin(pathGlow) * .5 + .5;
+              ctx.fillStyle = C.pathFill + (.05 + gp * .04) + ')';
+              ctx.fillRect(px + 1, py + 1, inner, inner);
+              ctx.strokeStyle = C.pathFill + (.45 + gp * .30) + ')';
+              ctx.lineWidth = .8;
+              ctx.strokeRect(px + 2, py + 2, inner - 2, inner - 2);
+            } else if (cell.explored && gScore) {
+              var gn = gScore[idx] < Infinity ? Math.min(1, gScore[idx] / maxG) : 0;
+              ctx.fillStyle = 'rgba(' + (C.exploredR + gn * 8) + ',' + (C.exploredG + gn * 10) + ',' + (C.exploredB + gn * 12) + ',' + (.65 - gn * .15) + ')';
+              ctx.fillRect(px + 1, py + 1, inner, inner);
+            } else if (cell.inOpen && gScore) {
+              ctx.fillStyle = C.openFill;
+              ctx.fillRect(px + 1, py + 1, inner, inner);
+            }
+            if (mode === 'user' && userPhase === 'pick_goal' && idx === userStart) {
+              ctx.fillStyle = C.dotStartPick;
+              ctx.fillRect(px + 1, py + 1, inner, inner);
+            }
+            var wa = uncarved ? C.wallUncarved : (cell.inPath || cell.explored || cell.inOpen) ? C.wallActive : C.wallCarved;
+            ctx.strokeStyle = C.wall + wa + ')';
+            ctx.lineWidth = 1; ctx.lineCap = 'square';
+            if (cell.walls[N]) { ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + CELL, py); ctx.stroke(); }
+            if (cell.walls[E]) { ctx.beginPath(); ctx.moveTo(px + CELL, py); ctx.lineTo(px + CELL, py + CELL); ctx.stroke(); }
+            if (cell.walls[S]) { ctx.beginPath(); ctx.moveTo(px, py + CELL); ctx.lineTo(px + CELL, py + CELL); ctx.stroke(); }
+            if (cell.walls[W3]) { ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py + CELL); ctx.stroke(); }
+          }
+        }
+
+        if (startIdx >= 0) drawDot(startIdx, C.dotStart);
+        if (goalIdx >= 0) drawDot(goalIdx, C.dotGoal);
+
+        if (solvePath && showPathIdx > 1) {
+          var gv = Math.sin(pathGlow) * .5 + .5;
+          ctx.beginPath();
+          for (var p = 0; p < showPathIdx && p < solvePath.length; p++) {
+            var pc = solvePath[p] % COLS, pr = Math.floor(solvePath[p] / COLS);
+            var ppx = offX + pc * CELL + CELL / 2, ppy = offY + pr * CELL + CELL / 2;
+            p === 0 ? ctx.moveTo(ppx, ppy) : ctx.lineTo(ppx, ppy);
+          }
+          ctx.strokeStyle = C.pathLine + (C.pathGlowAlpha + gv * C.pathGlowDelta) + ')';
+          ctx.lineWidth = 10; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke();
+          ctx.beginPath();
+          for (var p2 = 0; p2 < showPathIdx && p2 < solvePath.length; p2++) {
+            var pc2 = solvePath[p2] % COLS, pr2 = Math.floor(solvePath[p2] / COLS);
+            var ppx2 = offX + pc2 * CELL + CELL / 2, ppy2 = offY + pr2 * CELL + CELL / 2;
+            p2 === 0 ? ctx.moveTo(ppx2, ppy2) : ctx.lineTo(ppx2, ppy2);
+          }
+          ctx.strokeStyle = C.pathLine + (C.pathLineAlpha + gv * C.pathLineDelta) + ')';
+          ctx.lineWidth = 1.8; ctx.stroke();
+          if (showPathIdx > 0) {
+            var hi = solvePath[Math.min(showPathIdx - 1, solvePath.length - 1)];
+            var hpc = hi % COLS, hpr = Math.floor(hi / COLS);
+            ctx.shadowColor = C.pathHeadGlow; ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(offX + hpc * CELL + CELL / 2, offY + hpr * CELL + CELL / 2, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = C.pathHead; ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        }
+      }
+
+      function drawDot(idx, color) {
+        if (idx < 0) return;
+        var c = idx % COLS, r = Math.floor(idx / COLS);
+        ctx.shadowColor = color; ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(offX + c * CELL + CELL / 2, offY + r * CELL + CELL / 2, 4, 0, Math.PI * 2);
+        ctx.fillStyle = color; ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      function draw(ts) {
+        requestAnimationFrame(draw);
+        if (mode === 'user') {
+          if (userPhase === 'solving') {
+            if (aRunning) {
+              stepSolve();
+            } else {
+              if (solvePath) {
+                pathDrawTick++;
+                if (pathDrawTick % 2 === 0 && showPathIdx < solvePath.length) {
+                  cells[solvePath[showPathIdx]].inPath = true;
+                  showPathIdx++;
+                }
+                if (showPathIdx >= solvePath.length) {
+                  userPhase = 'done';
+                  userDoneTimer = ts;
+                  if (hint) { hint.textContent = 'Click anywhere to search again'; hint.classList.remove('hide'); }
+                }
+              } else {
+                userPhase = 'done'; userDoneTimer = ts;
+              }
+            }
+          } else if (userPhase === 'done') {
+            if (ts - userDoneTimer > USER_DONE_PAUSE) enterAuto();
+          }
+          render();
+          return;
+        }
+        if (autoPhase === 'generate') {
+          if (!stepGenerate()) { autoPhase = 'pause_pre_solve'; autoTimer = ts; }
+        } else if (autoPhase === 'pause_pre_solve') {
+          if (ts - autoTimer > PAUSE_SHORT) autoStartSolve();
+        } else if (autoPhase === 'solve') {
+          stepSolve();
+          if (!aRunning && solvePath) { autoPhase = 'showpath'; }
+          else if (!aRunning && !solvePath) { autoPhase = 'pause_pre_regen'; autoTimer = ts; }
+        } else if (autoPhase === 'showpath') {
+          pathDrawTick++;
+          if (pathDrawTick % 3 === 0) {
+            if (showPathIdx < solvePath.length) { cells[solvePath[showPathIdx]].inPath = true; showPathIdx++; }
+            else { autoPhase = 'pause_pre_regen'; autoTimer = ts; }
+          }
+        } else if (autoPhase === 'pause_pre_regen') {
+          if (ts - autoTimer > PAUSE_LONG) enterAuto();
+        }
+        render();
+      }
+
+      canvas.addEventListener('click', function (e) {
+        var rect = canvas.getBoundingClientRect();
+        var lx = e.clientX - rect.left;
+        var ly = e.clientY - rect.top;
+        var cc = Math.floor((lx - offX) / CELL);
+        var cr = Math.floor((ly - offY) / CELL);
+        if (cc < 0 || cc >= COLS || cr < 0 || cr >= ROWS) return;
+        var idx = ci(cc, cr);
+        var cel = cells[idx];
+        if (cel.walls[0] && cel.walls[1] && cel.walls[2] && cel.walls[3]) return;
+        if (mode === 'auto' || (mode === 'user' && (userPhase === 'done' || userPhase === 'pick_start'))) {
+          mode = 'user'; userPhase = 'pick_goal';
+          userStart = idx; userGoal = -1;
+          startIdx = -1; goalIdx = -1;
+          solvePath = null; aRunning = false;
+          for (var i = 0; i < cells.length; i++) {
+            cells[i].explored = false; cells[i].inOpen = false; cells[i].inPath = false;
+          }
+          gScore = null;
+          if (hint) { hint.textContent = 'Now click a destination cell'; hint.classList.remove('hide'); }
+        } else if (mode === 'user' && userPhase === 'pick_goal') {
+          if (idx === userStart) return;
+          userGoal = idx;
+          userPhase = 'solving';
+          beginAStar(userStart, userGoal);
+          if (hint) hint.classList.add('hide');
+        }
+      });
+
+      window.addEventListener('resize', function () {
+        clearTimeout(window._mrt);
+        window._mrt = setTimeout(resize, 80);
+      });
+
+      var _started = false;
+      function tryInit() {
+        if (_started) return;
+        W = heroEl.offsetWidth || window.innerWidth;
+        H = heroEl.offsetHeight || window.innerHeight;
+        if (!W || !H || W < 100) { setTimeout(tryInit, 50); return; }
+        _started = true;
+        resize();
+        requestAnimationFrame(draw);
+      }
+      if (document.readyState === 'complete') setTimeout(tryInit, 0);
+      else window.addEventListener('load', tryInit);
+      setTimeout(tryInit, 300);
+    })();
+
+    /* ══ CURSOR ══ */
+    var cur = document.getElementById('cur');
+    var ring = document.getElementById('cur-ring');
+    var cmx = 0, cmy = 0, crx = 0, cry = 0;
+    document.addEventListener('mousemove', function (e) { cmx = e.clientX; cmy = e.clientY; });
+    (function animC() {
+      cur.style.left = cmx + 'px'; cur.style.top = cmy + 'px';
+      crx += (cmx - crx) * .13; cry += (cmy - cry) * .13;
+      ring.style.left = crx + 'px'; ring.style.top = cry + 'px';
+      requestAnimationFrame(animC);
+    })();
+    function bindCursorHover(el) {
+      el.addEventListener('mouseenter', function () { cur.classList.add('big'); });
+      el.addEventListener('mouseleave', function () { cur.classList.remove('big'); });
     }
-  });
+    document.querySelectorAll('a,button,.proj-row,.stat-card').forEach(bindCursorHover);
 
-  window.addEventListener('resize', function () {
-    clearTimeout(window._mrt);
-    window._mrt = setTimeout(resize, 80);
-  });
+    /* ══ NAV ══ */
+    window.addEventListener('scroll', function () {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+    });
 
-  var _started = false;
-  function tryInit() {
-    if (_started) return;
-    W = heroEl.offsetWidth || window.innerWidth;
-    H = heroEl.offsetHeight || window.innerHeight;
-    if (!W || !H || W < 100) { setTimeout(tryInit, 50); return; }
-    _started = true;
-    resize();
-    requestAnimationFrame(draw);
-  }
-  if (document.readyState === 'complete') setTimeout(tryInit, 0);
-  else window.addEventListener('load', tryInit);
-  setTimeout(tryInit, 300);
-})();
+    /* ══ FADE-IN ══ */
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.fi,.titem').forEach(function (el, i) {
+      el.style.transitionDelay = (i % 5) * .07 + 's'; obs.observe(el);
+    });
+    setTimeout(function () { document.querySelectorAll('.fi,.titem').forEach(function (el) { el.classList.add('vis'); }); }, 900);
 
-/* ══ CURSOR ══ */
-var cur = document.getElementById('cur');
-var ring = document.getElementById('cur-ring');
-var cmx = 0, cmy = 0, crx = 0, cry = 0;
-document.addEventListener('mousemove', function (e) { cmx = e.clientX; cmy = e.clientY; });
-(function animC() {
-  cur.style.left = cmx + 'px'; cur.style.top = cmy + 'px';
-  crx += (cmx - crx) * .13; cry += (cmy - cry) * .13;
-  ring.style.left = crx + 'px'; ring.style.top = cry + 'px';
-  requestAnimationFrame(animC);
-})();
-function bindCursorHover(el) {
-  el.addEventListener('mouseenter', function () { cur.classList.add('big'); });
-  el.addEventListener('mouseleave', function () { cur.classList.remove('big'); });
-}
-document.querySelectorAll('a,button,.proj-row,.stat-card').forEach(bindCursorHover);
+    /* ══ PROJECTS TOGGLE ══ */
+    var projToggle = document.getElementById('proj-toggle');
+    var projOthers = document.getElementById('proj-others');
+    var projToggleLabel = document.getElementById('proj-toggle-label');
+    var othersOpen = false;
 
-/* ══ NAV ══ */
-window.addEventListener('scroll', function () {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
-});
-
-/* ══ FADE-IN ══ */
-var obs = new IntersectionObserver(function (entries) {
-  entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
-}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
-document.querySelectorAll('.fi,.titem').forEach(function (el, i) {
-  el.style.transitionDelay = (i % 5) * .07 + 's'; obs.observe(el);
-});
-setTimeout(function () { document.querySelectorAll('.fi,.titem').forEach(function (el) { el.classList.add('vis'); }); }, 900);
-
-/* ══ PROJECTS TOGGLE ══ */
-var projToggle = document.getElementById('proj-toggle');
-var projOthers = document.getElementById('proj-others');
-var projToggleLabel = document.getElementById('proj-toggle-label');
-var othersOpen = false;
-
-projToggle.addEventListener('click', function () {
-  othersOpen = !othersOpen;
-  projToggle.setAttribute('aria-expanded', othersOpen);
-  projOthers.setAttribute('aria-hidden', !othersOpen);
-  projOthers.classList.toggle('open', othersOpen);
-  projToggleLabel.textContent = othersOpen ? '− hide other projects' : '+ 5 more projects';
-  if (othersOpen) {
-    /* attach cursor + click handlers to newly revealed rows */
-    projOthers.querySelectorAll('.proj-row').forEach(function (row) {
-      bindCursorHover(row);
-      if (!row.dataset.bound) {
-        row.dataset.bound = '1';
-        row.addEventListener('click', function () { openModal(+row.dataset.project); });
+    projToggle.addEventListener('click', function () {
+      othersOpen = !othersOpen;
+      projToggle.setAttribute('aria-expanded', othersOpen);
+      projOthers.setAttribute('aria-hidden', !othersOpen);
+      projOthers.classList.toggle('open', othersOpen);
+      projToggleLabel.textContent = othersOpen ? '− hide other projects' : '+ 5 more projects';
+      if (othersOpen) {
+        /* attach cursor + click handlers to newly revealed rows */
+        projOthers.querySelectorAll('.proj-row').forEach(function (row) {
+          bindCursorHover(row);
+          if (!row.dataset.bound) {
+            row.dataset.bound = '1';
+            row.addEventListener('click', function () { openModal(+row.dataset.project); });
+          }
+        });
       }
     });
-  }
-});
 
-/* ══ MODAL + SLIDER ══ */
-var overlay = document.getElementById('modal-overlay');
-var slidesEl = document.getElementById('slides');
-var dotsEl = document.getElementById('sl-dots');
-var counterEl = document.getElementById('sl-counter');
-var curSlide = 0, totSlides = 0;
+    /* ══ MODAL + SLIDER ══ */
+    var overlay = document.getElementById('modal-overlay');
+    var slidesEl = document.getElementById('slides');
+    var dotsEl = document.getElementById('sl-dots');
+    var counterEl = document.getElementById('sl-counter');
+    var curSlide = 0, totSlides = 0;
 
-function goTo(n) {
-  curSlide = ((n % totSlides) + totSlides) % totSlides;
-  slidesEl.style.transform = 'translateX(-' + (curSlide * 100) + '%)';
-  document.querySelectorAll('.sl-dot').forEach(function (d, i) { d.classList.toggle('on', i === curSlide); });
-  counterEl.textContent = (curSlide + 1) + ' / ' + totSlides;
-}
-
-function buildSlider(slides) {
-  slidesEl.innerHTML = ''; dotsEl.innerHTML = ''; totSlides = slides.length;
-  slides.forEach(function (s, i) {
-    var div = document.createElement('div'); div.className = 'slide';
-
-    if (s.type === 'diagram') {
-      /* SVG architecture diagram slide */
-      var diagramWrap = document.createElement('div');
-      diagramWrap.className = 'slide-diagram';
-      diagramWrap.innerHTML = s.svg;
-      div.appendChild(diagramWrap);
-      /* diagram type badge */
-      var badge = document.createElement('span');
-      badge.className = 'slide-label';
-      badge.style.cssText = 'position:absolute;bottom:1rem;left:1rem;z-index:3;';
-      badge.textContent = s.label || 'Architecture';
-      div.appendChild(badge);
-    } else if (s.img) {
-      div.innerHTML = '<img src="' + s.img + '" alt="' + s.label + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/><span class="slide-label" style="position:relative;z-index:2">' + s.label + '</span>';
-    } else {
-      var col = document.createElement('div'); col.className = 'slide-color'; col.style.background = s.color || '#111';
-      var bg = document.createElement('div'); bg.className = 'slide-bg';
-      var lbl = document.createElement('span'); lbl.className = 'slide-label'; lbl.textContent = s.label;
-      div.appendChild(col); div.appendChild(bg); div.appendChild(lbl);
+    function goTo(n) {
+      curSlide = ((n % totSlides) + totSlides) % totSlides;
+      slidesEl.style.transform = 'translateX(-' + (curSlide * 100) + '%)';
+      document.querySelectorAll('.sl-dot').forEach(function (d, i) { d.classList.toggle('on', i === curSlide); });
+      counterEl.textContent = (curSlide + 1) + ' / ' + totSlides;
     }
 
-    slidesEl.appendChild(div);
-    var dot = document.createElement('div'); dot.className = 'sl-dot' + (i === 0 ? ' on' : '');
-    dot.addEventListener('click', function () { goTo(i); });
-    dotsEl.appendChild(dot);
-  });
-  goTo(0);
-}
+    function buildSlider(slides) {
+      slidesEl.innerHTML = ''; dotsEl.innerHTML = ''; totSlides = slides.length;
+      slides.forEach(function (s, i) {
+        var div = document.createElement('div'); div.className = 'slide';
 
-function openModal(idx) {
-  var p = PROJECTS[idx]; if (!p) return;
-  document.getElementById('modal-title').textContent = p.title;
-  document.getElementById('modal-year').textContent = p.year;
-  document.getElementById('modal-desc').textContent = p.desc;
-  document.getElementById('modal-tags').innerHTML = p.tags.map(function (t) { return '<span class="modal-tag">' + t + '</span>'; }).join('');
-  document.getElementById('modal-links').innerHTML = p.links.map(function (l) { return '<a class="modal-link" href="' + l.url + '" target="_blank">' + l.label + '</a>'; }).join('');
-  buildSlider(p.slides);
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+        if (s.type === 'diagram') {
+          /* SVG architecture diagram slide */
+          var diagramWrap = document.createElement('div');
+          diagramWrap.className = 'slide-diagram';
+          diagramWrap.innerHTML = s.svg;
+          div.appendChild(diagramWrap);
+          /* diagram type badge */
+          var badge = document.createElement('span');
+          badge.className = 'slide-label';
+          badge.style.cssText = 'position:absolute;bottom:1rem;left:1rem;z-index:3;';
+          badge.textContent = s.label || 'Architecture';
+          div.appendChild(badge);
+        } else if (s.img) {
+          div.innerHTML = '<img src="' + s.img + '" alt="' + s.label + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/><span class="slide-label" style="position:relative;z-index:2">' + s.label + '</span>';
+        } else {
+          var col = document.createElement('div'); col.className = 'slide-color'; col.style.background = s.color || '#111';
+          var bg = document.createElement('div'); bg.className = 'slide-bg';
+          var lbl = document.createElement('span'); lbl.className = 'slide-label'; lbl.textContent = s.label;
+          div.appendChild(col); div.appendChild(bg); div.appendChild(lbl);
+        }
 
-function closeModal() {
-  overlay.classList.remove('open');
-  document.body.style.overflow = '';
-}
+        slidesEl.appendChild(div);
+        var dot = document.createElement('div'); dot.className = 'sl-dot' + (i === 0 ? ' on' : '');
+        dot.addEventListener('click', function () { goTo(i); });
+        dotsEl.appendChild(dot);
+      });
+      goTo(0);
+    }
 
-document.getElementById('modal-close').addEventListener('click', closeModal);
-document.getElementById('sl-prev').addEventListener('click', function () { goTo(curSlide - 1); });
-document.getElementById('sl-next').addEventListener('click', function () { goTo(curSlide + 1); });
-overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+    function openModal(idx) {
+      var p = PROJECTS[idx]; if (!p) return;
+      document.getElementById('modal-title').textContent = p.title;
+      document.getElementById('modal-year').textContent = p.year;
+      document.getElementById('modal-desc').textContent = p.desc;
+      document.getElementById('modal-tags').innerHTML = p.tags.map(function (t) { return '<span class="modal-tag">' + t + '</span>'; }).join('');
+      document.getElementById('modal-links').innerHTML = p.links.map(function (l) { return '<a class="modal-link" href="' + l.url + '" target="_blank">' + l.label + '</a>'; }).join('');
+      buildSlider(p.slides);
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
 
-document.querySelectorAll('#proj-featured .proj-row').forEach(function (row) {
-  row.addEventListener('click', function () { openModal(+row.dataset.project); });
-});
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
 
-document.addEventListener('keydown', function (e) {
-  if (!overlay.classList.contains('open')) return;
-  if (e.key === 'ArrowRight') goTo(curSlide + 1);
-  if (e.key === 'ArrowLeft') goTo(curSlide - 1);
-  if (e.key === 'Escape') closeModal();
-});
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('sl-prev').addEventListener('click', function () { goTo(curSlide - 1); });
+    document.getElementById('sl-next').addEventListener('click', function () { goTo(curSlide + 1); });
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
 
-var touchX = null;
-overlay.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
-overlay.addEventListener('touchend', function (e) {
-  if (touchX === null) return;
-  var dx = e.changedTouches[0].clientX - touchX;
-  if (Math.abs(dx) > 40) goTo(curSlide + (dx < 0 ? 1 : -1));
-  touchX = null;
-});
+    document.querySelectorAll('#proj-featured .proj-row').forEach(function (row) {
+      row.addEventListener('click', function () { openModal(+row.dataset.project); });
+    });
 
-</script>
+    document.addEventListener('keydown', function (e) {
+      if (!overlay.classList.contains('open')) return;
+      if (e.key === 'ArrowRight') goTo(curSlide + 1);
+      if (e.key === 'ArrowLeft') goTo(curSlide - 1);
+      if (e.key === 'Escape') closeModal();
+    });
+
+    var touchX = null;
+    overlay.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+    overlay.addEventListener('touchend', function (e) {
+      if (touchX === null) return;
+      var dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) goTo(curSlide + (dx < 0 ? 1 : -1));
+      touchX = null;
+    });
+
+  </script>
 </body>
+
 </html>
